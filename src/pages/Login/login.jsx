@@ -1,23 +1,23 @@
-import { useContext, useEffect, useState } from 'react';
-import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useFormik } from 'formik';
-import {
-  Container,
-  Card,
-  Title,
-  Subtitle,
-  StyledLogoSvg,
-  TitleContainer,
-  Button,
-  InputField,
-  ErrorLabel,
-  ActionLinksContainer,
-  ActionLink,
-  ModalBackdrop,
-  ModalContent
-} from './login.styles.jsx';
+import { useContext, useEffect, useState } from 'react';
 import { loginValidationSchema } from '../../schemas/validations/authentication.validations';
-import { signin } from '../../api/AuthenticationAPI';
+import {
+  ActionLink,
+  ActionLinksContainer,
+  Button,
+  Card,
+  Container,
+  ErrorLabel,
+  InputField,
+  ModalBackdrop,
+  ModalContent,
+  StyledLogoSvg,
+  Subtitle,
+  Title,
+  TitleContainer
+} from './login.styles.jsx';
+// import { signin } from '../../api/AuthenticationAPI';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../config/Auth';
 
@@ -34,7 +34,7 @@ function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordRecoveryModalOpen, setPasswordRecoveryModalOpen] = useState(false);
 
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
   const navigate  = useNavigate();
 
   function handlePasswordRecovery(e) {
@@ -58,13 +58,13 @@ function LoginPage() {
     onSubmit: async (values, actions) => {
       setIsLoading(true);
       try {
-        await signin(values);
+        await signIn(values);
         setLoginError(null);
-        setIsAuthenticated(true);
         navigate('/home');
       } catch (error) {
         actions.resetForm();
         setLoginError(error.message);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
