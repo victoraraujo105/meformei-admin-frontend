@@ -16,3 +16,27 @@ export interface University {
   city: string;
   state: string;
 }
+
+export interface Curriculum {
+  id: string;
+  course: Course;
+  description: string;
+  extraCurricularHours: number;
+  optionalHours: number;
+  requiredHours: number;
+  university: University;
+}
+
+
+export interface Course {
+  id: string;
+  name: string;
+}
+
+export interface University {
+  id: string;
+  name: string;
+  abv: string;
+  city: string;
+  state: string;
+}

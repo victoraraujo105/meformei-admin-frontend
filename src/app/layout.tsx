@@ -3,7 +3,8 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
-
+import { CssBaseline } from '@mui/material'
+import 'react-toastify/dist/ReactToastify.css';
 const poppins = Poppins({ subsets: ['latin'], weight: "600" })
 
 export const metadata: Metadata = {
@@ -19,11 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-      <ThemeRegistry> 
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </ThemeRegistry>
+        <ThemeRegistry>
+          <CssBaseline />
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeRegistry>
       </body>
     </html>
   )

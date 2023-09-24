@@ -85,10 +85,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 interface Props {
-  children : React.ReactNode
-  title? : string
+  children: React.ReactNode
+  title?: string
 }
-export default function DrawerComponent({ children, title}: Props) {
+export default function DrawerComponent({ children, title }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -102,7 +102,7 @@ export default function DrawerComponent({ children, title}: Props) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -129,11 +129,11 @@ export default function DrawerComponent({ children, title}: Props) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <ListMenu/>
+        <ListMenu />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-         {children}         
+        {children}
       </Box>
     </Box>
   );
