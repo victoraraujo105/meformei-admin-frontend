@@ -1,6 +1,10 @@
-import API from "../config/API";
-import { UserAdmin } from "./../config/Auth";
+import API from "@/config/api";
+import { UserAdmin } from "./../contexts/AuthContext";
 
+interface signIn {
+  username: string;
+  password: string;
+}
 export const AuthService = {
   async signIn({ username, password }: signIn) {
     return await API.post(`auth/signin`, {
@@ -8,16 +12,20 @@ export const AuthService = {
       password: password,
     });
   },
-  async getSession(): Promise<{ session: { session: boolean } }> {
+  async getSession({
+    token,
+  }: {
+    token: string | null;
+  }): Promise<{ session: { session: boolean } }> {
+    if (token) {
+      const { data } = await API.get("auth/session");
+      return { session: data };
+    }
     const { data } = await API.get("auth/session");
     return { session: data };
   },
+
   async me(): Promise<UserAdmin> {
-    return API.get("auth/me").then((response) => response.data); // implementar no backend
+    return API.get("auth/me"); // implementar no backend
   },
 };
-
-interface signIn {
-  username: string;
-  password: string;
-}
