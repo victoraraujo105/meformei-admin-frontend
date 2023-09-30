@@ -5,17 +5,18 @@ import { useFormik } from 'formik';
 
 import { University } from '@/types';
 import { universityEditSchema } from './validations';
-import { UniversityService } from '@/services/univesity.service';
+import { BodyUniversity, UniversityService } from '@/services/univesity.service';
 import { ToastContainer, toast } from 'react-toastify';
 import DialogConfirmation from '../Dialog/DialogConfirmation';
 import { useRouter } from 'next/navigation';
 import { Cidade, Estado, getCidadesPorEstado, getEstados } from '@/services/ibge.service';
 import useToast from '@/hooks/useToast';
+import useUniversity from '@/hooks/useUniversity';
 
 
 interface Props {
   university: University
-  onSave?: (values: any) => void;
+  onSave?: (values: BodyUniversity) => void;
 }
 
 function UniversityDetails({ university, onSave }: Props) {
@@ -28,7 +29,7 @@ function UniversityDetails({ university, onSave }: Props) {
   const [stateId, setStateId] = useState<Estado>();
   const [isLoaded, setIsLoaded] = useState(false)
   const { toastRef } = useToast()
-
+  const { updateUniversity, deleteUniversity } = useUniversity()
   async function fetchData() {
     try {
       const response = await getEstados();
@@ -83,7 +84,7 @@ function UniversityDetails({ university, onSave }: Props) {
 
       try {
         if (newData) {
-          await UniversityService.updateUnivesity(university.id, newData)
+          await updateUniversity({ id: university.id, data: newData })
           setTimeout(() => {
             if (toastRef.current) {
               toastRef.current.success('Dados atualizados com sucesso!');
@@ -130,8 +131,7 @@ function UniversityDetails({ university, onSave }: Props) {
 
   const confirmDelete = async () => {
     try {
-      const response = await UniversityService.deleteUnivesity(university.id)
-
+      await deleteUniversity(university.id)
       setTimeout(() => {
 
         toast.success('Universidade deletada com sucesso!');

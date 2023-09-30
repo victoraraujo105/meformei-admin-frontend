@@ -9,14 +9,6 @@ export interface UserAdmin {
   state: string;
 }
 
-export interface University {
-  id: string;
-  name: string;
-  abv: string;
-  city: string;
-  state: string;
-}
-
 export interface Curriculum {
   id: string;
   course: Course;

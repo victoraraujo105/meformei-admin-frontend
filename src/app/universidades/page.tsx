@@ -3,12 +3,11 @@ import DataGrid from "@/components/DataGrid";
 import FormDialog from "@/components/Dialog/DialogForm";
 import { UniversityBody, universityAddSchema } from "@/components/University/validations";
 import useToast from "@/hooks/useToast";
+import useUniversity from "@/hooks/useUniversity";
 import { Cidade, Estado, getCidadesPorEstado, getEstados } from "@/services/ibge.service";
-import { UniversityService } from "@/services/univesity.service";
-import { University } from "@/types";
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Button, FormControl, FormHelperText, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent } from "@mui/material";
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent } from "@mui/material";
 import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId } from "@mui/x-data-grid";
 
 import { useFormik } from "formik";
@@ -19,15 +18,16 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const rows: any[] = [];
 
-
 export default function Page() {
-  const [data, setData] = useState<University[]>([])
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const [states, setStates] = useState<Estado[]>([]);
   const [cities, setCities] = useState<Cidade[]>([]);
   const { toastRef, setToastRef } = useToast()
   const router = useRouter()
+  const { createUniversity, universities } = useUniversity()
+
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -87,7 +87,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    UniversityService.getUniversities().then((response) => setData(response.data.universities));
     setToastRef(toast)
     async function fetchEstados() {
       try {
@@ -117,8 +116,6 @@ export default function Page() {
     }
   };
 
-
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -137,11 +134,8 @@ export default function Page() {
 
     try {
       if (newData) {
-        const response = await UniversityService.postUnivesity(newData)
-        setData((prev) => [...prev, response.data.university])
-
+        await createUniversity({ universityBody: newData })
         setTimeout(() => {
-
           toast.success('Universidade criada com sucesso!');
           setOpenDialogForm(false)
           setIsLoading(false);
@@ -170,7 +164,7 @@ export default function Page() {
       <DataGrid
         editMode="row"
         onRowEditStop={handleRowEditStop}
-        rows={data ?? rows}
+        rows={universities ?? rows}
         columns={columns}
         key={"dg universidade"} />
       <Button sx={{ mt: 1 }} variant="contained" fullWidth onClick={() => setOpenDialogForm(true)}>Adicionar</Button>

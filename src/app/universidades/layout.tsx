@@ -1,4 +1,5 @@
 import DrawerComponent from '@/components/Drawer'
+import { UniversityProvider } from '@/contexts/UniversityContext'
 
 
 export default function RootLayout({
@@ -8,9 +9,11 @@ export default function RootLayout({
 }) {
   return (
 
-      <DrawerComponent title='Universidades'>
+    <DrawerComponent title='Universidades'>
+      <UniversityProvider>
         {children}
-      </DrawerComponent>
+      </UniversityProvider>
+    </DrawerComponent>
 
   )
 }

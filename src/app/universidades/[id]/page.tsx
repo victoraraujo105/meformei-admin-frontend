@@ -21,11 +21,16 @@ async function getData(id: string) {
   return data
 }
 
+interface PageProps {
+  params: {
+    id: string
+  }
+}
+
+
 export default async function Page({
   params: { id },
-}: {
-  params: { id: string }
-}) {
+}: PageProps) {
   const data = await getData(id)
   const tabs: PropertyComponentTabs[] = [
     {

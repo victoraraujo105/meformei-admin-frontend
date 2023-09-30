@@ -59,8 +59,8 @@ export default function BasicTabs({ tabs }: Props) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          {tabs?.map(element =>
-            <Tab label={element.tabTitle} {...a11yProps(element.tabIndex)} />
+          {tabs?.map((element, index) =>
+            <Tab label={element.tabTitle} {...a11yProps(element.tabIndex ?? index)} />
           )}
         </Tabs>
       </Box>

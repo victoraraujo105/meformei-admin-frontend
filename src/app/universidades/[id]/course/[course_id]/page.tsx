@@ -21,7 +21,7 @@
 // }
 
 // export default async function Page({
-//   params: { id },
+//   params: { course_id },
 // }: {
 //   params: { id: string }
 // }) {

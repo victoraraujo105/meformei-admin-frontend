@@ -21,3 +21,10 @@ export interface UniversityBody {
   city: string;
   state: string;
 }
+
+export type PartialUniversity = {
+  name?: string;
+  abv?: string;
+  city?: string;
+  state?: string;
+}
