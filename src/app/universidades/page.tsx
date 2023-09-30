@@ -158,6 +158,8 @@ export default function Page() {
 
   const formId = "addUniversity"
 
+  console.log(universities)
+
   return (
     <>
       <ToastContainer />

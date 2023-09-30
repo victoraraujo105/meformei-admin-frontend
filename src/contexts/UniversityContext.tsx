@@ -13,19 +13,20 @@ export const UniversityProvider = ({ children }: Props) => {
   const [universities, setUniversities] = useState<University[]>([]);
 
   useEffect(() => {
-    UniversityService.getUniversities().then((response) => setUniversities(response.data))
+    UniversityService.getUniversities().then((response) => setUniversities(response.data.universities))
   }, [])
 
   const deleteUniversity = async (id: string) => {
     const response = await UniversityService.deleteUnivesity(id)
-    // encontrar (no universities) a universidade que foi atualizada no backend
-    // e atualiza-lo 
-    //setUniversities((prev) => [...prev, response.data.university])
+    // encontrar (no universities) a universidade que foi deletada no backend
+    // e remove-lo:
+    setUniversities((prev) => prev.filter((university) => university.id !== id))
   }
   const updateUniversity = async ({ id, data }: UpdateUniversity) => {
     const response = await UniversityService.updateUnivesity(id, data)
     // encontrar (no universities) a universidade que foi atualizada no backend
-    // e atualiza-lo 
+    // e atualiza-lo: 
+    setUniversities((prev) => prev.map((university) => university.id === id ? response.data.university : university))
     //setUniversities((prev) => [...prev, response.data.university])
   }
   const createUniversity = async ({ universityBody }: { universityBody: UniversityBody }) => {

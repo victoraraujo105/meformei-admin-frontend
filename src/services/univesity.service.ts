@@ -4,7 +4,9 @@ import { PartialUniversity }from "@/components/University/validations/index"
 
 export const UniversityService = {
   async getUniversities() {
-    return await API.get(`universities`);
+    let res = await API.get(`universities`);
+    console.log(res);
+    return res;
   },
   async postUnivesity(university: BodyUniversity){
     return await API.post(`universities`, university);
