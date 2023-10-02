@@ -2,24 +2,25 @@
 import { Button } from "@mui/material";
 import DataGrid from "../DataGrid";
 import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId } from "@mui/x-data-grid";
-import { Curriculum } from "@/types";
+import { Course } from "@/types";
 import { useEffect, useState } from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useRouter } from "next/navigation";
-import { UniversityService } from "@/services/univesity.service";
+import { UniversityService } from "@/services/university.service";
 
 interface Props {
   universityId: string;
 }
 
 export default function CoursesInUniversity({ universityId }: Props) {
-  const [data, setData] = useState<Curriculum[]>([])
+  const [data, setData] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const router = useRouter()
 
   const handleRowViewClick = (id: GridRowId) => () => {
-    router.push(`universidades/${universityId}/course/${id}`)
+    console.log("params: ", universityId, id)
+    router.push(`/universidades/${universityId}/course/${id}`)
   };
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
@@ -31,7 +32,7 @@ export default function CoursesInUniversity({ universityId }: Props) {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
-      field: 'name',
+      field: 'courseName',
       headerName: 'Nome',
       width: 150,
       flex: 1,

@@ -9,20 +9,28 @@ export interface UserAdmin {
   state: string;
 }
 
-export interface Curriculum {
+export interface Discipline {
   id: string;
+  name: string;
+  cod: string;
+  menu: string;
   course: Course;
+  description: string;
+  isOptional: boolean;
+  bibliography: any[];
+  prerequisites: any[];
+  workload: number;
+  period: number;
+}
+
+export interface Course {
+  id: string;
+  courseName: string;
   description: string;
   extraCurricularHours: number;
   optionalHours: number;
   requiredHours: number;
   university: University;
-}
-
-
-export interface Course {
-  id: string;
-  name: string;
 }
 
 export interface University {

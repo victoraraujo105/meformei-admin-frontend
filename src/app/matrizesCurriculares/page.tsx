@@ -1,6 +1,6 @@
 "use client"
 import DataGrid from "@/components/DataGrid";
-import { UniversityService } from "@/services/univesity.service";
+import { UniversityService } from "@/services/university.service";
 import { University } from "@/types";
 
 import { GridColDef } from "@mui/x-data-grid";

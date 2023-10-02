@@ -1,12 +1,11 @@
 "use client"
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import { createContext, useEffect, useState } from 'react';
-import { AuthService } from '../services/auth.service';
 import { University } from '@/types';
-import { UniversityService } from '@/services/univesity.service';
+import { UniversityService } from '@/services/university.service';
 import { PartialUniversity, UniversityBody } from '@/components/University/validations';
 
-export const UniversityContext = createContext({} as UnivesityContextType);
+export const UniversityContext = createContext({} as UniversityContextType);
 
 export const UniversityProvider = ({ children }: Props) => {
 
@@ -48,7 +47,7 @@ export const UniversityProvider = ({ children }: Props) => {
 };
 
 
-type UnivesityContextType = {
+type UniversityContextType = {
   universities: University[];
   deleteUniversity: (id: string) => Promise<void>;
   updateUniversity: (data: UpdateUniversity) => Promise<void>;

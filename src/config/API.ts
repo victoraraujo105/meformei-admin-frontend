@@ -18,6 +18,6 @@ export const getApi = () => {
 
   return api;
 };
-const API = getApi();
 
+const API = getApi();
 export default API;

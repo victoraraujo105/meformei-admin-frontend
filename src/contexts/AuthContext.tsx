@@ -14,12 +14,12 @@ export const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const { token } = parseCookies()
 
-    if (token) {
-      AuthService.me().then((response: any) => {
-        setUser(response)
-      }).catch((error: any) => console.log(error))
+    // if (token) {
+    //   AuthService.me().then((response: any) => {
+    //     setUser(response)
+    //   }).catch((error: any) => console.log(error))
 
-    }
+    // }
   }, [])
 
   async function signIn({ username, password }: SignInData) {

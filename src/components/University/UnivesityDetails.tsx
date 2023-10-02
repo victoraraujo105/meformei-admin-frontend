@@ -4,8 +4,8 @@ import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormCon
 import { useFormik } from 'formik';
 
 import { University } from '@/types';
-import { universityEditSchema } from './validations';
-import { BodyUniversity, UniversityService } from '@/services/univesity.service';
+import { universityEditSchema, UniversityBody } from './validations';
+import { UniversityService } from '@/services/university.service';
 import { ToastContainer, toast } from 'react-toastify';
 import DialogConfirmation from '../Dialog/DialogConfirmation';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ import useUniversity from '@/hooks/useUniversity';
 
 interface Props {
   university: University
-  onSave?: (values: BodyUniversity) => void;
+  onSave?: (values: UniversityBody) => void;
 }
 
 function UniversityDetails({ university, onSave }: Props) {
