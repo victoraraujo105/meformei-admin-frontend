@@ -8,9 +8,9 @@ export default function RootLayout({
 }) {
   return (
 
-    <DrawerComponent title="Painel principal">
-      {children}
-    </DrawerComponent>
+      <DrawerComponent title='Universidades'>
+        {children}
+      </DrawerComponent>
 
   )
 }

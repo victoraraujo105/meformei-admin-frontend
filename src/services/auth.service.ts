@@ -1,4 +1,4 @@
-import API from "@/config/api";
+import API from "@/config/API";
 import { UserAdmin } from "./../contexts/AuthContext";
 
 interface signIn {
