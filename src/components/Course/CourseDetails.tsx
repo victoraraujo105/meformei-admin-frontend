@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormControl, InputLabel, FormHelperText, InputAdornment, OutlinedInput, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormControl, InputLabel, FormHelperText, InputAdornment, OutlinedInput, Select, MenuItem, SelectChangeEvent, ButtonGroup } from '@mui/material';
 import { useFormik } from 'formik';
 
 import { Course } from '@/types';
@@ -22,23 +22,10 @@ function CourseDetails({ course, onSave }: Props) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(true)
   const { toastRef } = useToast()
   const { updateCourse, deleteCourse } = useCourse()
-  async function fetchData() {
-    try {
-
-    }
-    catch (error) {
-
-    }
-    setIsLoaded(true)
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, [])
-
+  
   const formik = useFormik({
     initialValues: {
     courseName: course.courseName,
@@ -52,7 +39,6 @@ function CourseDetails({ course, onSave }: Props) {
       setIsLoading(true)
 
       try {
-
           await updateCourse({ id: course.id, data: values })
           setTimeout(() => {
             if (toastRef.current) {
@@ -71,20 +57,12 @@ function CourseDetails({ course, onSave }: Props) {
     },
   });
 
-
-  const handleStateChange = async (event: SelectChangeEvent<string>) => {
-    // const state = event.target.value;
-    // formik.setFieldValue('state', state);
-    // formik.setFieldValue('city', '');
-  };
-
-
   const confirmDelete = async () => {
     try {
       await deleteCourse(course.id)
       setTimeout(() => {
 
-        toast.success('Universidade deletada com sucesso!');
+        toast.success('Curso deletado com sucesso!');
         setOpenDialogConfirmation(false)
         router.back()
       }, 1000);
@@ -150,9 +128,9 @@ function CourseDetails({ course, onSave }: Props) {
             </FormControl>
 
             <FormControl sx={{ mb: 3 }} fullWidth>
-              <InputLabel htmlFor="name">Horas Complementares </InputLabel>
+              <InputLabel htmlFor="name">Horas Optativas </InputLabel>
               <OutlinedInput
-                id="extraCurricularHours"
+                id="optionalHours"
                 label="Horas Complementares"
                 name="optionalHours"
                 aria-describedby="optionalHours-helper-text"
@@ -166,27 +144,28 @@ function CourseDetails({ course, onSave }: Props) {
             </FormControl>
 
             <FormControl sx={{ mb: 3 }} fullWidth>
-              <InputLabel htmlFor="name">Horas Complementares </InputLabel>
+              <InputLabel htmlFor="name">Horas Obrigatórias </InputLabel>
               <OutlinedInput
-                id="extraCurricularHours"
+                id="requiredHours"
                 label="Horas Complementares"
-                name="extraCurricularHours"
-                aria-describedby="extraCurricularHours-helper-text"
-                value={formik.values.extraCurricularHours}
+                name="requiredHours"
+                aria-describedby="requiredHours-helper-text"
+                value={formik.values.requiredHours}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.extraCurricularHours && Boolean(formik.errors.extraCurricularHours)}
+                error={formik.touched.requiredHours && Boolean(formik.errors.requiredHours)}
 
               />
-              <FormHelperText id="extraCurricularHours-helper-text">{formik.touched.extraCurricularHours && formik.errors.extraCurricularHours}</FormHelperText>
+              <FormHelperText id="requiredHours-helper-text">{formik.touched.requiredHours && formik.errors.requiredHours}</FormHelperText>
             </FormControl>
 
-            <FormControl fullWidth sx={{ mb: 3 }}>
+            <ButtonGroup style={{display: 'flex'}}>
+               <Button disabled={isLoading} variant="contained" fullWidth type="submit">Salvar</Button>
+               <Button sx={{ mt: 0, bgcolor: "red", ":hover": { bgcolor: "#6f0000" } }} disabled={isLoading} variant="contained" fullWidth  onClick={() => setOpenDialogConfirmation(true)}>Deletar</Button>
+            </ButtonGroup>
 
-            <Button disabled={isLoading} variant="contained" fullWidth type="submit">Salvar</Button>
           </form>
           <ToastContainer />
-          <Button sx={{ mt: 2, bgcolor: "red", ":hover": { bgcolor: "#6f0000" } }} disabled={isLoading} variant="contained" fullWidth onClick={() => setOpenDialogConfirmation(true)}>Deletar</Button>
           <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
         </Card>
       )}

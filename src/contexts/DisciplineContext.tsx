@@ -7,51 +7,43 @@ import { PartialDiscipline, DisciplineBody } from '@/components/Discipline/valid
 
 export const DisciplineContext = createContext({} as DisciplineContextType);
 
-export const DisciplineProvider = ({ children, course }: Props) => {
+export const DisciplineProvider = ({ children, course, disciplines }: Props) => {
 
-  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
-
-    useEffect(() => {
-        DisciplineService
-            .getDisciplines(course.university.id, course.id)
-            .then((response) => 
-                setDisciplines(response.data.disciplines
-                    .map((discipline: Discipline) => 
-                        ({ ...discipline, course })
-                    )
-                )
-            )
-    }, [])
-
+  const [data, setData] = useState<Discipline[]>([]);
+  
+  useEffect(() => {
+    setData(disciplines)
+  }, [disciplines])
+  
   const deleteDiscipline = async (id: string) => {
     const response = await DisciplineService.deleteDiscipline(course.university.id, course.id, id)
-    setDisciplines((prev) => prev.filter((discipline) => discipline.id !== id))
+    setData((prev) => prev.filter((discipline) => discipline.id !== id))
   }
   const updateDiscipline = async ({ id, data }: UpdateDiscipline) => {
     DisciplineService.updateDiscipline(course.university.id, course.id, id,  data)
       .then((response) => 
-        setDisciplines((prev) => prev.map((discipline) => discipline.id === id ? response.data.discipline : discipline))
+        setData((prev) => prev.map((discipline) => discipline.id === id ? response.data.discipline : discipline))
       )
   }
   const createDiscipline = async ({ disciplineBody }: { disciplineBody: DisciplineBody }) => {
     DisciplineService.postDiscipline(course.university.id, disciplineBody)
-      .then((response) => setDisciplines((prev) => [...prev, response.data.discipline]))
+      .then((response) => setData((prev) => [...prev, response.data.discipline]))
   };
 
   const readDiscipline = async (id: string) => {
-    const discipline = disciplines.find((discipline: Discipline) => discipline.id === id)
+    const discipline = data.find((discipline: Discipline) => discipline.id === id)
     return discipline ?? null
   }
 
   return (
-    <DisciplineContext.Provider value={{ disciplines, createDiscipline, updateDiscipline, deleteDiscipline, readDiscipline }}>
+    <DisciplineContext.Provider value={{ disciplines: data, createDiscipline, updateDiscipline, deleteDiscipline, readDiscipline }}>
       {children}
     </DisciplineContext.Provider>
   );
 };
 
 
-type DisciplineContextType = {
+export type DisciplineContextType = {
   disciplines: Discipline[];
   deleteDiscipline: (id: string) => Promise<void>;
   updateDiscipline: (data: UpdateDiscipline) => Promise<void>;
@@ -59,12 +51,13 @@ type DisciplineContextType = {
   readDiscipline: (id: string) => Promise<Discipline | null>;
 }
 
-interface Props {
+export interface Props {
   children: React.ReactNode,
-  course: Course
+  course: Course,
+  disciplines: Discipline[]
 }
 
-interface UpdateDiscipline {
+export interface UpdateDiscipline {
   id: string,
   data: PartialDiscipline
 }

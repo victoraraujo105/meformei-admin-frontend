@@ -61,13 +61,13 @@ export default function Page() {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
+      getActions: ({ row }) => {
         return [
           <GridActionsCellItem
             key={"view"}
             icon={<VisibilityIcon />}
             label="Detalhes"
-            onClick={handleRowViewClick(id)}
+            onClick={handleRowViewClick(row.id)}
             color="inherit"
           />,
         ];

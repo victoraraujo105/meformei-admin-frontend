@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormControl, InputLabel, FormHelperText, InputAdornment, OutlinedInput, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormControl, InputLabel, FormHelperText, InputAdornment, OutlinedInput, Select, MenuItem, SelectChangeEvent, ButtonGroup } from '@mui/material';
 import { useFormik } from 'formik';
 
 import { University } from '@/types';
@@ -227,11 +227,13 @@ function UniversityDetails({ university, onSave }: Props) {
                 <div>{formik.errors.city}</div>
               )}
             </FormControl>
-
-            <Button disabled={isLoading} variant="contained" fullWidth type="submit">Salvar</Button>
+              
+            <ButtonGroup style={{display: 'flex'}}>
+               <Button disabled={isLoading} variant="contained" fullWidth type="submit">Salvar</Button>
+               <Button sx={{ mt: 0, bgcolor: "red", ":hover": { bgcolor: "#6f0000" } }} disabled={isLoading} variant="contained" fullWidth  onClick={() => setOpenDialogConfirmation(true)}>Deletar</Button>
+            </ButtonGroup>
           </form>
           <ToastContainer />
-          <Button sx={{ mt: 2, bgcolor: "red", ":hover": { bgcolor: "#6f0000" } }} disabled={isLoading} variant="contained" fullWidth onClick={() => setOpenDialogConfirmation(true)}>Deletar</Button>
           <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
         </Card>
       )}

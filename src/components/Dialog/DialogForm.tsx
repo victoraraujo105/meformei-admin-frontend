@@ -27,8 +27,8 @@ export default function FormDialog({ children, open, title, formId, isLoading, h
 
       </DialogContent>
       <DialogActions>
-        <Button disabled={isLoading} onClick={handleClose}>Cancelar</Button>
-        <Button disabled={isLoading} onClick={handleClose} type='submit' form={formId}>Confirmar</Button>
+        <Button variant="outlined" disabled={isLoading} onClick={handleClose}>Cancelar</Button>
+        <Button variant="contained" disabled={isLoading} onClick={handleClose} type='submit' form={formId}>Confirmar</Button>
       </DialogActions>
     </Dialog>
 

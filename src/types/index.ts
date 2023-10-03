@@ -17,10 +17,10 @@ export interface Discipline {
   course: Course;
   description: string;
   isOptional: boolean;
-  bibliography: any[];
-  prerequisites: any[];
+  bibliography: string[];
+  preRequisites: Discipline[];
   workload: number;
-  period: number;
+  semester: number;
 }
 
 export interface Course {
@@ -39,4 +39,38 @@ export interface University {
   abv: string;
   city: string;
   state: string;
+}
+
+export interface DisciplinesResponse {
+  period: number,
+  disciplines: DisciplineResponse[]
+}
+
+export interface DisciplineResponse {
+  bibliography: string[];
+  cod: string;
+  curriculumId: string;
+  description: string;
+  id: string;
+  isOptional: boolean;
+  menu: string;
+  name: string;
+  prerequisites: Discipline[];
+  workload: number;
+}
+
+export const disciplineResponseToDiscipline = (input: DisciplineResponse, course: Course, period: number): Discipline => {
+  return {
+    id: input.id,
+    name: input.name,
+    cod: input.cod,
+    menu: input.menu,
+    course: course, // provide a value for course
+    description: input.description,
+    isOptional: input.isOptional,
+    bibliography: input.bibliography,
+    preRequisites: input.prerequisites,
+    workload: input.workload,
+    semester: period // provide a value for period
+  }
 }

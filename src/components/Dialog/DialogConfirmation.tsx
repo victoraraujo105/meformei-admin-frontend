@@ -33,8 +33,8 @@ export default function DialogConfirmation({ content, handleClose, onConfirm, op
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancelar</Button>
-        <Button onClick={onConfirm} autoFocus>
+        <Button variant="outlined" onClick={handleClose}>Cancelar</Button>
+        <Button variant="contained" onClick={onConfirm} autoFocus>
           Confirmar
         </Button>
       </DialogActions>
