@@ -1,6 +1,6 @@
 "use client"
 import Box from '@mui/material/Box';
-import { DataGrid as DG, DataGridProps, GridColDef, GridEventListener } from '@mui/x-data-grid';
+import { DataGrid as DG, DataGridProps, GridColDef } from '@mui/x-data-grid';
 
 
 interface Props extends DataGridProps {

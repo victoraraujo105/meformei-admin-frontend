@@ -1,27 +1,28 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { Card, Typography, Avatar, List, ListItem, ListItemText, Button, FormControl, InputLabel, FormHelperText, InputAdornment, OutlinedInput, Select, MenuItem, SelectChangeEvent, ButtonGroup } from '@mui/material';
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material';
 import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
 
-import { University } from '@/types';
-import { universityEditSchema, UniversityBody } from './validations';
-import { UniversityService } from '@/services/university.service';
-import { ToastContainer, toast } from 'react-toastify';
-import DialogConfirmation from '../Dialog/DialogConfirmation';
-import { useRouter } from 'next/navigation';
-import { Cidade, Estado, getCidadesPorEstado, getEstados } from '@/services/ibge.service';
 import useToast from '@/hooks/useToast';
 import useUniversity from '@/hooks/useUniversity';
+import { Cidade, Estado, getCidadesPorEstado, getEstados } from '@/services/ibge.service';
+import { University } from '@/types';
+import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import DialogConfirmation from '../Dialog/DialogConfirmation';
+import { universityEditSchema } from './validations';
 
 
 interface Props {
   university: University
-  onSave?: (values: UniversityBody) => void;
+  onSave: () => void;
 }
 
-function UniversityDetails({ university, onSave }: Props) {
+function EditUniversity({ university, onSave }: Props) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isChanged, setIsChanged] = useState(false)
+
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
   const [states, setStates] = useState<Estado[]>([]);
   const [cities, setCities] = useState<Cidade[]>([]);
@@ -64,6 +65,10 @@ function UniversityDetails({ university, onSave }: Props) {
     fetchData();
   }, [])
 
+  const handleChange = () => {
+    setIsChanged(true)
+  }
+
   const formik = useFormik({
     initialValues: {
       name: university.name,
@@ -73,7 +78,6 @@ function UniversityDetails({ university, onSave }: Props) {
     },
     validationSchema: universityEditSchema,
     onSubmit: async (values) => {
-      // onSave(values);
       setIsLoading(true)
 
       const findedState = states.find((state) => state.id === values.state)
@@ -90,6 +94,8 @@ function UniversityDetails({ university, onSave }: Props) {
               toastRef.current.success('Dados atualizados com sucesso!');
             }
             setIsLoading(false)
+            onSave()
+            setIsChanged(false)
           }, 1000);
 
         } else {
@@ -149,8 +155,8 @@ function UniversityDetails({ university, onSave }: Props) {
   return (
     <>
       {university && isLoaded && (
-        <Card className='pt-6'>
-          <form onSubmit={formik.handleSubmit}>
+        <div className='w-[60%]'>
+          <form onSubmit={formik.handleSubmit} onChange={handleChange}>
             <FormControl sx={{ mb: 3 }} fullWidth>
               <InputLabel htmlFor="name">Nome</InputLabel>
               <OutlinedInput
@@ -227,18 +233,21 @@ function UniversityDetails({ university, onSave }: Props) {
                 <div>{formik.errors.city}</div>
               )}
             </FormControl>
-              
-            <ButtonGroup style={{display: 'flex'}}>
-               <Button disabled={isLoading} variant="contained" fullWidth type="submit">Salvar</Button>
-               <Button sx={{ mt: 0, bgcolor: "red", ":hover": { bgcolor: "#6f0000" } }} disabled={isLoading} variant="contained" fullWidth  onClick={() => setOpenDialogConfirmation(true)}>Deletar</Button>
-            </ButtonGroup>
+
+            <div className='flex justify-between '>
+
+              <Button disabled={isLoading} className='w-[25%]' variant="outlined" onClick={() => router.back()}>voltar</Button>
+              <Button disabled={isLoading || !isChanged} className='w-[25%]' variant="contained" type="submit">Salvar</Button>
+
+            </div>
+
           </form>
           <ToastContainer />
           <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
-        </Card>
+        </div>
       )}
     </>
   );
 }
 
-export default UniversityDetails;
+export default EditUniversity;

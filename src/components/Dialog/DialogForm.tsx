@@ -1,24 +1,22 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import * as React from 'react';
 
 interface Props {
   title: string
-  handleClose: () => void;
+  onClose: () => void;
   onConfirm: () => void;
   open: boolean;
   children: React.ReactNode
   formId: string;
   isLoading: boolean;
 }
-export default function FormDialog({ children, open, title, formId, isLoading, handleClose, onConfirm }: Props) {
+export default function FormDialog({ children, open, title, formId, isLoading, onClose, onConfirm }: Props) {
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
 
@@ -27,8 +25,8 @@ export default function FormDialog({ children, open, title, formId, isLoading, h
 
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" disabled={isLoading} onClick={handleClose}>Cancelar</Button>
-        <Button variant="contained" disabled={isLoading} onClick={handleClose} type='submit' form={formId}>Confirmar</Button>
+        <Button variant="outlined" disabled={isLoading} onClick={onClose}>Cancelar</Button>
+        <Button variant="contained" disabled={isLoading} onClick={onClose} type='submit' form={formId}>Confirmar</Button>
       </DialogActions>
     </Dialog>
 

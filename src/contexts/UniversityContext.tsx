@@ -1,15 +1,15 @@
 "use client"
-import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { createContext, useEffect, useState } from 'react';
-import { University } from '@/types';
-import { UniversityService } from '@/services/university.service';
 import { PartialUniversity, UniversityBody } from '@/components/University/validations';
+import { UniversityService } from '@/services/university.service';
+import { University } from '@/types';
+import { createContext, useEffect, useState } from 'react';
 
 export const UniversityContext = createContext({} as UniversityContextType);
 
 export const UniversityProvider = ({ children }: Props) => {
 
   const [universities, setUniversities] = useState<University[]>([]);
+
 
   useEffect(() => {
     UniversityService.getUniversities().then((response) => setUniversities(response.data.universities))
