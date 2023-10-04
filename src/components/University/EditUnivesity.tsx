@@ -14,16 +14,16 @@ import { universityEditSchema } from './validations';
 
 
 interface Props {
-  university: University
+  university: University 
   onSave: () => void;
 }
 
 function EditUniversity({ university, onSave }: Props) {
-  const router = useRouter()
+ 
   const [isLoading, setIsLoading] = useState(false)
   const [isChanged, setIsChanged] = useState(false)
 
-  const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
+
   const [states, setStates] = useState<Estado[]>([]);
   const [cities, setCities] = useState<Cidade[]>([]);
   const [cityId, setCityId] = useState<Cidade>();
@@ -135,22 +135,7 @@ function EditUniversity({ university, onSave }: Props) {
   };
 
 
-  const confirmDelete = async () => {
-    try {
-      await deleteUniversity(university.id)
-      setTimeout(() => {
-
-        toast.success('Universidade deletada com sucesso!');
-        setOpenDialogConfirmation(false)
-        router.back()
-      }, 1000);
-
-
-    } catch (error) {
-      toast.error('Ocorreu um erro ao deletar.');
-    }
-
-  }
+  
 
   return (
     <>
@@ -236,14 +221,14 @@ function EditUniversity({ university, onSave }: Props) {
 
             <div className='flex justify-between '>
 
-              <Button disabled={isLoading} className='w-[25%]' variant="outlined" onClick={() => router.back()}>voltar</Button>
+              <Button disabled={isLoading} className='w-[25%]' variant="outlined" onClick={() => onSave()}>voltar</Button>
               <Button disabled={isLoading || !isChanged} className='w-[25%]' variant="contained" type="submit">Salvar</Button>
 
             </div>
 
           </form>
           <ToastContainer />
-          <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
+          
         </div>
       )}
     </>
