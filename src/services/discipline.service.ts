@@ -2,18 +2,16 @@ import { DisciplineBody, PartialDiscipline } from "@/components/Discipline/valid
 import API from "@/config/API";
 
 export const DisciplineService = {
-  async getDisciplines(universityId: string, curriculumId: string) {
-    return await API.get(`universities/${universityId}/courses/${curriculumId}/disciplines`);
+  async getDisciplines(curriculumId: string) {
+    return await API.get(`curriculums/${curriculumId}/disciplines`);
   },
-  async postDiscipline(universityId: string, discipline: DisciplineBody) {
-    return await API.post(`universities/${universityId}/courses`, discipline);
+  async postDiscipline(curriculumId: string , discipline: DisciplineBody) {
+    return await API.post(`curriculums/${curriculumId}/disciplines`, discipline);
   },
-  async updateDiscipline(universityId: string, curriculumId: string, id: string, data: PartialDiscipline): Promise<any> {
-    // return await API.post(`universities/${universityId}/courses`, data);
-    return null;
+  async updateDiscipline(id: string, data: PartialDiscipline): Promise<any> {
+    return await API.patch(`curriculums/disciplines/${id}`, data);
   },
-  async deleteDiscipline(universityId: string, curriculumId: string, id: string): Promise<any> {
-    // return await API.delete(`universities/${universityId}/courses/${id}`);
-    return null;
+  async deleteDiscipline(id: string): Promise<any> {
+    return await API.delete(`curriculums/disciplines/${id}`);
   },
 };

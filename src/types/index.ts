@@ -11,16 +11,16 @@ export interface UserAdmin {
 
 export interface Discipline {
   id: string;
-  name: string;
   cod: string;
-  menu: string;
-  course: Course;
-  description: string;
-  isOptional: boolean;
-  bibliography: string[];
-  preRequisites: Discipline[];
-  workload: number;
+  optional: boolean;
+  name: string;
+  courseOutline: string;
   semester: number;
+  description: string;
+  prerequisiteDisciplines: string[];
+  bibliography: string[];
+  curriculumId: string;
+  hours: number;
 }
 
 export interface Course {
@@ -59,18 +59,3 @@ export interface DisciplineResponse {
   workload: number;
 }
 
-export const disciplineResponseToDiscipline = (input: DisciplineResponse, course: Course, period: number): Discipline => {
-  return {
-    id: input.id,
-    name: input.name,
-    cod: input.cod,
-    menu: input.menu,
-    course: course, // provide a value for course
-    description: input.description,
-    isOptional: input.isOptional,
-    bibliography: input.bibliography,
-    preRequisites: input.prerequisites,
-    workload: input.workload,
-    semester: period // provide a value for period
-  }
-}

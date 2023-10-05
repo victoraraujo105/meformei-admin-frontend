@@ -1,49 +1,49 @@
 
 'use client'
 
-import useUniversity from "@/hooks/useUniversity"
-import { University as UniversityType } from "@/types"
+import useDiscipline from "@/hooks/useDiscipline"
+import { Discipline as DisciplineType } from "@/types"
 import { Button, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import DialogConfirmation from "../Dialog/DialogConfirmation"
 import Loading from "../Loading"
-import DetailsUniversity from "./DetailsUniversity"
-import EditUniversity from "./EditUnivesity"
+import DetailsDiscipline from "./DetailsDiscipline"
+import EditDiscipline from "./EditDiscipline"
 
 interface Props {
-  universityId: string;
+  disciplineId: string;
 }
 
-export default function University({ universityId }: Props) {
+export default function Discipline({ disciplineId }: Props) {
   const [isLoading, setIsLoading] = useState(true)
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
-  const { deleteUniversity, readUniversity, universities } = useUniversity()
-  const [university, setUniversity] = useState<UniversityType>()
+  const { disciplines, readDiscipline, deleteDiscipline } = useDiscipline()
+  const [discipline, setDiscipline] = useState<DisciplineType>()
 
 
   useEffect(() => {
-    readUniversity(universityId).then((university) => {
-      if (!!university) {
-        setUniversity(university)
+    readDiscipline(disciplineId).then((discipline) => {
+      if (!!discipline) {
+        setDiscipline(discipline)
       } else {
         setIsLoading(false)
       }
       setIsLoading(false)
     })
-  }, [universities])
+  }, [disciplines])
 
   const router = useRouter()
 
 
   const confirmDelete = async () => {
     try {
-      await deleteUniversity(universityId)
+      await deleteDiscipline(disciplineId)
       setTimeout(() => {
 
-        toast.success('Universidade deletada com sucesso!');
+        toast.success('Disciplina deletada com sucesso!');
         setOpenDialogConfirmation(false)
         router.back()
       }, 1000);
@@ -55,14 +55,14 @@ export default function University({ universityId }: Props) {
 
   if (isLoading) return <Loading />
 
-  if (!!university) {
+  if (!!discipline) {
     if (!!editVisibility)
-      return <EditUniversity university={university} onSave={() => setEditVisibility(false)} />
+      return <EditDiscipline discipline={discipline} onSave={() => setEditVisibility(false)} />
     else {
       return (
         <div>
           <div className="flex flex-col w-[32rem] mt-3">
-            {<DetailsUniversity university={university} />}
+            {<DetailsDiscipline discipline={discipline} />}
             <div className="flex justify-between mt-12 w-[90%]">
               <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => setOpenDialogConfirmation(true)}> Deletar </Button>
 

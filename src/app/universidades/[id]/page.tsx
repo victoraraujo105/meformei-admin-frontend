@@ -1,7 +1,7 @@
 
 import BasicTabs from '@/components/Tabs/index'
 import { PropertyComponentTabs } from '@/components/Tabs/tabs'
-import UniversityDetails from '@/components/University'
+import University from '@/components/University'
 import CoursesInUniversity from '@/components/University/CoursesInUniversity'
 
 
@@ -40,7 +40,7 @@ export default async function Page({
     {
       tabIndex: 0,
       tabTitle: "Editar",
-      tabComponent: <UniversityDetails universityId={id} />
+      tabComponent: <University universityId={id} />
     },
     {
       tabIndex: 1,

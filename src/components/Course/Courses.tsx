@@ -1,47 +1,51 @@
-"use client"
-import DataGrid from "@/components/DataGrid";
-import AddUniversity from "@/components/University/AddUniversity";
-import useUniversity from "@/hooks/useUniversity";
+import useCourse from "@/hooks/useCourse";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button } from "@mui/material";
 import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId } from "@mui/x-data-grid";
-
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AddCourse from "../Course/AddCourse";
+import DataGrid from "../DataGrid";
 
-import { ToastContainer } from 'react-toastify';
-
-const rows: any[] = [];
-
-export default function Page() {
+export default function Courses() {
+  const { courses } = useCourse()
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
-  const { universities } = useUniversity()
   const router = useRouter()
+
+  const handleRowViewClick = (id: GridRowId) => () => {
+    router.push(`/cursos/${id}`)
+  };
+
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
-      field: 'name',
+      field: 'courseName',
       headerName: 'Nome',
       width: 150,
       flex: 1,
     },
     {
-      field: 'abv',
-      headerName: 'Abreviação',
-      width: 150,
-
-    },
-    {
-      field: 'city',
-      headerName: 'Cidade',
+      field: 'requiredHours',
+      headerName: 'Qtd de horas obrig.',
       width: 110,
       flex: 1,
     },
     {
-      field: 'state',
-      headerName: 'Estado',
+      field: 'optionalHours',
+      headerName: 'Qtd de horas opcional',
+      width: 110,
+      flex: 1,
+    },
+    {
+      field: 'extraCurricularHours',
+      headerName: 'Qtd de horas extras',
       width: 110,
       flex: 1,
     },
@@ -65,29 +69,22 @@ export default function Page() {
     }
   ];
 
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
 
-  const handleRowViewClick = (id: GridRowId) => () => {
-    router.push(`universidades/${id}`)
-  };
+  useEffect(() => {
+  }, [courses])
+
 
   return (
-    <>
-      <ToastContainer />
+    <div>
       <DataGrid
         editMode="row"
         onRowEditStop={handleRowEditStop}
-        rows={universities ?? rows}
+        rows={courses}
         columns={columns}
-        key={"dg universidade"}
+        key={"dg cursos na universidade"}
         toolbar={<Button variant="text" onClick={() => setOpenDialogForm(true)} startIcon={<AddIcon />} >Adicionar</Button>}
       />
-      <AddUniversity open={openDialogForm} onClose={() => setOpenDialogForm(false)} onConfirm={() => setOpenDialogForm(true)} />
-    </>
+      <AddCourse open={openDialogForm} onClose={() => setOpenDialogForm(false)} onConfirm={() => setOpenDialogForm(true)} />
+    </div>
   )
-
 }

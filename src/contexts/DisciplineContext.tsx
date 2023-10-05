@@ -1,32 +1,31 @@
 "use client"
-import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { createContext, useEffect, useState } from 'react';
-import { Course, Discipline } from '@/types';
+import { DisciplineBody, PartialDiscipline } from '@/components/Discipline/validations';
 import { DisciplineService } from '@/services/discipline.service';
-import { PartialDiscipline, DisciplineBody } from '@/components/Discipline/validations';
+import { Discipline } from '@/types';
+import { createContext, useEffect, useState } from 'react';
 
 export const DisciplineContext = createContext({} as DisciplineContextType);
 
-export const DisciplineProvider = ({ children, course, disciplines }: Props) => {
+export const DisciplineProvider = ({ children, courseId }: Props) => {
 
   const [data, setData] = useState<Discipline[]>([]);
-  
+
   useEffect(() => {
-    setData(disciplines)
-  }, [disciplines])
-  
+    DisciplineService.getDisciplines(courseId).then((response) => setData(response.data.disciplines))
+  }, [])
+
   const deleteDiscipline = async (id: string) => {
-    const response = await DisciplineService.deleteDiscipline(course.university.id, course.id, id)
+    const response = await DisciplineService.deleteDiscipline(id)
     setData((prev) => prev.filter((discipline) => discipline.id !== id))
   }
   const updateDiscipline = async ({ id, data }: UpdateDiscipline) => {
-    DisciplineService.updateDiscipline(course.university.id, course.id, id,  data)
-      .then((response) => 
+    DisciplineService.updateDiscipline(id, data)
+      .then((response) =>
         setData((prev) => prev.map((discipline) => discipline.id === id ? response.data.discipline : discipline))
       )
   }
   const createDiscipline = async ({ disciplineBody }: { disciplineBody: DisciplineBody }) => {
-    DisciplineService.postDiscipline(course.university.id, disciplineBody)
+    DisciplineService.postDiscipline(courseId, disciplineBody)
       .then((response) => setData((prev) => [...prev, response.data.discipline]))
   };
 
@@ -53,8 +52,7 @@ export type DisciplineContextType = {
 
 export interface Props {
   children: React.ReactNode,
-  course: Course,
-  disciplines: Discipline[]
+  courseId: string,
 }
 
 export interface UpdateDiscipline {

@@ -7,19 +7,17 @@ import useToast from '@/hooks/useToast';
 import useUniversity from '@/hooks/useUniversity';
 import { Cidade, Estado, getCidadesPorEstado, getEstados } from '@/services/ibge.service';
 import { University } from '@/types';
-import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
-import DialogConfirmation from '../Dialog/DialogConfirmation';
 import { universityEditSchema } from './validations';
 
 
 interface Props {
-  university: University 
+  university: University
   onSave: () => void;
 }
 
 function EditUniversity({ university, onSave }: Props) {
- 
+
   const [isLoading, setIsLoading] = useState(false)
   const [isChanged, setIsChanged] = useState(false)
 
@@ -30,7 +28,8 @@ function EditUniversity({ university, onSave }: Props) {
   const [stateId, setStateId] = useState<Estado>();
   const [isLoaded, setIsLoaded] = useState(false)
   const { toastRef } = useToast()
-  const { updateUniversity, deleteUniversity } = useUniversity()
+  const { updateUniversity } = useUniversity()
+
   async function fetchData() {
     try {
       const response = await getEstados();
@@ -135,12 +134,12 @@ function EditUniversity({ university, onSave }: Props) {
   };
 
 
-  
+
 
   return (
     <>
       {university && isLoaded && (
-        <div className='w-[60%]'>
+        <div className='w-[32rem] mt-3'>
           <form onSubmit={formik.handleSubmit} onChange={handleChange}>
             <FormControl sx={{ mb: 3 }} fullWidth>
               <InputLabel htmlFor="name">Nome</InputLabel>
@@ -228,7 +227,7 @@ function EditUniversity({ university, onSave }: Props) {
 
           </form>
           <ToastContainer />
-          
+
         </div>
       )}
     </>

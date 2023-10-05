@@ -1,49 +1,50 @@
 
 'use client'
 
-import useUniversity from "@/hooks/useUniversity"
-import { University as UniversityType } from "@/types"
+import { Course as CourseType } from "@/types"
 import { Button, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import DialogConfirmation from "../Dialog/DialogConfirmation"
 import Loading from "../Loading"
-import DetailsUniversity from "./DetailsUniversity"
-import EditUniversity from "./EditUnivesity"
+
+import useCourse from "@/hooks/useCourse"
+import DetailsCourse from "./DetailsCourse"
+import EditCourse from "./EditCourse"
 
 interface Props {
-  universityId: string;
+  courseId: string;
 }
 
-export default function University({ universityId }: Props) {
+export default function Course({ courseId }: Props) {
   const [isLoading, setIsLoading] = useState(true)
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
-  const { deleteUniversity, readUniversity, universities } = useUniversity()
-  const [university, setUniversity] = useState<UniversityType>()
+  const { deleteCourse, readCourse, courses } = useCourse()
+  const [course, setCourse] = useState<CourseType>()
 
 
   useEffect(() => {
-    readUniversity(universityId).then((university) => {
-      if (!!university) {
-        setUniversity(university)
+    readCourse(courseId).then((course) => {
+      if (!!course) {
+        setCourse(course)
       } else {
         setIsLoading(false)
       }
       setIsLoading(false)
     })
-  }, [universities])
+  }, [courses])
 
   const router = useRouter()
 
 
   const confirmDelete = async () => {
     try {
-      await deleteUniversity(universityId)
+      await deleteCourse(courseId)
       setTimeout(() => {
 
-        toast.success('Universidade deletada com sucesso!');
+        toast.success('Curso deletado com sucesso!');
         setOpenDialogConfirmation(false)
         router.back()
       }, 1000);
@@ -55,14 +56,14 @@ export default function University({ universityId }: Props) {
 
   if (isLoading) return <Loading />
 
-  if (!!university) {
+  if (!!course) {
     if (!!editVisibility)
-      return <EditUniversity university={university} onSave={() => setEditVisibility(false)} />
+      return <EditCourse course={course} onSave={() => setEditVisibility(false)} />
     else {
       return (
         <div>
           <div className="flex flex-col w-[32rem] mt-3">
-            {<DetailsUniversity university={university} />}
+            {<DetailsCourse course={course} />}
             <div className="flex justify-between mt-12 w-[90%]">
               <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => setOpenDialogConfirmation(true)}> Deletar </Button>
 

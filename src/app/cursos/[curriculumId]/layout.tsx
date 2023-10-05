@@ -8,9 +8,9 @@ export default function RootLayout({
 }) {
   return (
 
-      <DrawerComponent title='Universidades'>
-        {children}
-      </DrawerComponent>
+    <DrawerComponent title="Curso">
+      {children}
+    </DrawerComponent>
 
   )
 }

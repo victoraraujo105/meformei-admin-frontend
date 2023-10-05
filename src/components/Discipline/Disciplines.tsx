@@ -1,25 +1,23 @@
 "use client"
-import { Button, TextField } from "@mui/material";
-import DataGrid from "../DataGrid";
-import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId } from "@mui/x-data-grid";
-import { Course, Discipline } from "@/types";
-import { useEffect, useState } from "react";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useRouter } from "next/navigation";
-import { UniversityService } from "@/services/university.service";
 import useDiscipline from "@/hooks/useDiscipline";
+import { Discipline } from "@/types";
+import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Button } from "@mui/material";
+import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import DataGrid from "../DataGrid";
+import AddDiscipline from './AddDiscipline';
 
 export default function Disciplines() {
-  // access context:
 
   const { disciplines } = useDiscipline()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const router = useRouter()
-  console.log("Disciplines: ", disciplines)
 
   const handleRowViewClick = (discipline: Discipline) => () => {
-    router.push(`/universidades/${discipline.course.university.id}/course/${discipline.course.id}/discipline/${discipline.id}`)
+    router.push(`${discipline.curriculumId}/disciplinas/${discipline.id}`)
   };
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
@@ -33,45 +31,28 @@ export default function Disciplines() {
     {
       field: 'name',
       headerName: 'Nome',
-      width: 150,
       flex: 1,
     },
     {
       field: 'cod',
       headerName: 'Código',
-      width: 110,
-      flex: 1,
+      flex: 0.4,
     },
     {
-      field: 'menu',
-      headerName: 'Ementa',
-      width: 110,
-      flex: 1,
-    },
-    {
-      field: 'description',
-      headerName: 'Descrição',
-      width: 110,
-      flex: 1,
-    },
-    {
-      field: 'isOptional',
+      field: 'optional',
       headerName: 'Optativa',
-      width: 110,
-      flex: 1,
+      flex: 0.3,
       valueGetter: (params) => params.value ? "Sim" : "Não",
     },
     {
       field: 'workload',
       headerName: 'Carga Horária',
-      width: 110,
-      flex: 1,
+      flex: 0.2,
     },
     {
       field: 'semester',
       headerName: 'Período',
-      width: 110,
-      flex: 1,
+      flex: 0.2,
     },
     {
       field: 'actions',
@@ -105,8 +86,10 @@ export default function Disciplines() {
         onRowEditStop={handleRowEditStop}
         rows={disciplines ?? []}
         columns={columns}
-        key={"dg disciplinas no curso"} />
-      <Button sx={{ mt: 1 }} variant="contained" fullWidth onClick={() => setOpenDialogForm(true)}>Adicionar</Button>
+        key={"dg disciplinas no curso"}
+        toolbar={<Button variant="text" onClick={() => setOpenDialogForm(true)} startIcon={<AddIcon />} >Adicionar</Button>}
+      />
+      <AddDiscipline open={openDialogForm} onClose={() => setOpenDialogForm(false)} onConfirm={() => setOpenDialogForm(true)} />
     </>
   )
 }
