@@ -7,7 +7,7 @@ import useToast from '@/hooks/useToast';
 import useUniversity from '@/hooks/useUniversity';
 import { Cidade, Estado, getCidadesPorEstado, getEstados } from '@/services/ibge.service';
 import { University } from '@/types';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { universityEditSchema } from './validations';
 
 
@@ -62,7 +62,7 @@ function EditUniversity({ university, onSave }: Props) {
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [university])
 
   const handleChange = () => {
     setIsChanged(true)
@@ -226,7 +226,6 @@ function EditUniversity({ university, onSave }: Props) {
             </div>
 
           </form>
-          <ToastContainer />
 
         </div>
       )}

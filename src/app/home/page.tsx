@@ -1,6 +1,9 @@
 
-export default function Home(){
-  return(
-        <h1>Home</h1>
+export default async function Home() {
+
+  return (
+    <div className="flex h-96 w-full items-center justify-center">
+      <h1>Pagina principall</h1>
+    </div>
   )
 }

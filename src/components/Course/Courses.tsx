@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button } from "@mui/material";
 import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId } from "@mui/x-data-grid";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AddCourse from "../Course/AddCourse";
 import DataGrid from "../DataGrid";
@@ -12,9 +12,10 @@ export default function Courses() {
   const { courses } = useCourse()
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleRowViewClick = (id: GridRowId) => () => {
-    router.push(`/cursos/${id}`)
+    router.push(`${pathname}/${id}`)
   };
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {

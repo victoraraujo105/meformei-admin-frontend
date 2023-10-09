@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,9 +10,10 @@ interface Props {
   handleClose: () => void;
   onConfirm: () => void;
   open: boolean;
+  buttonDisabled?: boolean
 }
 
-export default function DialogConfirmation({ content, handleClose, onConfirm, open }: Props) {
+export default function DialogConfirmation({ buttonDisabled, content, handleClose, onConfirm, open }: Props) {
 
 
   return (
@@ -34,7 +34,7 @@ export default function DialogConfirmation({ content, handleClose, onConfirm, op
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>Cancelar</Button>
-        <Button variant="contained" onClick={onConfirm} autoFocus>
+        <Button variant="contained" onClick={onConfirm} disabled={buttonDisabled} autoFocus>
           Confirmar
         </Button>
       </DialogActions>

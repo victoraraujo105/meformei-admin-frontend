@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button } from "@mui/material";
 import { GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons } from "@mui/x-data-grid";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import DataGrid from "../DataGrid";
 import AddDiscipline from './AddDiscipline';
@@ -15,9 +15,9 @@ export default function Disciplines() {
   const { disciplines } = useDiscipline()
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const router = useRouter()
-
+  const pathName = usePathname()
   const handleRowViewClick = (discipline: Discipline) => () => {
-    router.push(`${discipline.curriculumId}/disciplinas/${discipline.id}`)
+    router.push(`${pathName}/${discipline.id}`)
   };
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {

@@ -1,12 +1,10 @@
+import { PartialUniversity, UniversityBody } from "@/components/University/validations/index";
 import API from "@/config/API";
-import { UniversityBody, PartialUniversity } from "@/components/University/validations/index"
 
 
 export const UniversityService = {
   async getUniversities() {
-    let res = await API.get(`universities`);
-    console.log(res);
-    return res;
+    return await API.get(`universities`);
   },
   async postUnivesity(university: UniversityBody){
     return await API.post(`universities`, university);

@@ -1,4 +1,3 @@
-import useToast from "@/hooks/useToast";
 import useUniversity from "@/hooks/useUniversity";
 import { Cidade, Estado, getCidadesPorEstado, getEstados } from "@/services/ibge.service";
 import { FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent } from "@mui/material";
@@ -18,11 +17,11 @@ export default function AddUniversity({ open, onClose, onConfirm }: Props) {
 
   const [states, setStates] = useState<Estado[]>([]);
   const [cities, setCities] = useState<Cidade[]>([]);
-  const { toastRef, setToastRef } = useToast()
-  const { createUniversity, universities } = useUniversity()
+
+  const { createUniversity } = useUniversity()
 
   useEffect(() => {
-    setToastRef(toast)
+
     async function fetchEstados() {
       try {
         const response = await getEstados();

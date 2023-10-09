@@ -1,7 +1,7 @@
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import { useFormikContext } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface MultiSelectChipTextFieldProps {
   fieldName: string;
@@ -27,9 +27,7 @@ function MultiSelectChipTextField({ fieldName }: MultiSelectChipTextFieldProps) 
     formik.setFieldValue(fieldName, newChips);
   };
 
-  useEffect(() => {
-    console.log(formik.values)
-  }, [])
+
 
   return (
     <div>

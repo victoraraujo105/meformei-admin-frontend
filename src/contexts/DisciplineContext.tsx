@@ -12,7 +12,7 @@ export const DisciplineProvider = ({ children, courseId }: Props) => {
 
   useEffect(() => {
     DisciplineService.getDisciplines(courseId).then((response) => setData(response.data.disciplines))
-  }, [])
+  }, [courseId])
 
   const deleteDiscipline = async (id: string) => {
     const response = await DisciplineService.deleteDiscipline(id)

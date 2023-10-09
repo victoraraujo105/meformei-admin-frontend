@@ -11,6 +11,7 @@ export const UniversityProvider = ({ children }: Props) => {
   const [universities, setUniversities] = useState<University[]>([]);
 
 
+
   useEffect(() => {
     UniversityService.getUniversities().then((response) => setUniversities(response.data.universities))
   }, [])

@@ -1,7 +1,7 @@
 "use client"
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
+import SchoolIcon from '@mui/icons-material/School';
 import {
   Divider,
   List,
@@ -16,13 +16,13 @@ import { useRouter } from "next/navigation";
 const CustomListItemText = styled(ListItemText, {
 })(() => ({
   ".MuiListItemText-primary": {
-    color:"#1976d2"
+    color: "#1976d2"
   },
 }));
 
-export default function ListMenu()  {
+export default function ListMenu() {
   const router = useRouter();
-  
+
   return (
     <List component="nav">
       <ListItemButton onClick={() => router.push("/home")}>
@@ -35,11 +35,11 @@ export default function ListMenu()  {
       <Divider />
       <ListItemButton onClick={() => router.push("/universidades")}>
         <ListItemIcon>
-          <PeopleIcon sx={{ color: "#1976d2" }}/>
+          <SchoolIcon sx={{ color: "#1976d2" }} />
         </ListItemIcon>
         <CustomListItemText primary="Universidades" />
       </ListItemButton>
-      
+
     </List>
   );
 

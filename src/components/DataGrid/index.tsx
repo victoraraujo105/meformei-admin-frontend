@@ -48,6 +48,7 @@ export default function DataGrid({ rows, columns, height, toolbar, ...props }: P
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <TextField
           variant="standard"
+          autoComplete='off'
           value={searchText}
           onChange={(e) => { setSearchText(e.target.value); requestSearch(e.target.value) }}
           placeholder="Buscar..."
@@ -85,7 +86,7 @@ export default function DataGrid({ rows, columns, height, toolbar, ...props }: P
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 5,
+              pageSize: 7,
             },
           },
         }}

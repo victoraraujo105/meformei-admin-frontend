@@ -20,7 +20,7 @@ export default function AddCourse({ open, onClose, onConfirm }: Props) {
 
   useEffect(() => {
     setToastRef(toast)
-  }, [])
+  })
 
   const formik = useFormik({
     initialValues: {
@@ -36,14 +36,13 @@ export default function AddCourse({ open, onClose, onConfirm }: Props) {
 
   const onSubmitForm = async (values: CourseBody) => {
     setIsLoading(true);
-
     try {
       await createCourse({ courseBody: values })
       setTimeout(() => {
         toast.success('Curso criado com sucesso!');
-        setIsLoading(false);
         formik.resetForm()
-        onClose
+        onClose()
+        setIsLoading(false);
       }, 1000);
     } catch (error) {
       toast.error('Ocorreu um erro ao criar.');
@@ -104,7 +103,7 @@ export default function AddCourse({ open, onClose, onConfirm }: Props) {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.requiredHours && Boolean(formik.errors.requiredHours)}
-
+            type="number"
           />
           <FormHelperText id="requiredHours-helper-text">{formik.touched.requiredHours && formik.errors.requiredHours}</FormHelperText>
         </FormControl>
@@ -120,7 +119,7 @@ export default function AddCourse({ open, onClose, onConfirm }: Props) {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.optionalHours && Boolean(formik.errors.optionalHours)}
-
+            type="number"
           />
           <FormHelperText id="optionalHours-helper-text">{formik.touched.optionalHours && formik.errors.optionalHours}</FormHelperText>
         </FormControl>
@@ -136,7 +135,7 @@ export default function AddCourse({ open, onClose, onConfirm }: Props) {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.extraCurricularHours && Boolean(formik.errors.extraCurricularHours)}
-
+            type="number"
           />
           <FormHelperText id="extraCurricularHours-helper-text">{formik.touched.extraCurricularHours && formik.errors.extraCurricularHours}</FormHelperText>
         </FormControl>

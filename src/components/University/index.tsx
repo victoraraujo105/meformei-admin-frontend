@@ -1,23 +1,25 @@
 
 'use client'
-
-import useUniversity from "@/hooks/useUniversity"
-import { University as UniversityType } from "@/types"
-import { Button, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
-import DialogConfirmation from "../Dialog/DialogConfirmation"
-import Loading from "../Loading"
-import DetailsUniversity from "./DetailsUniversity"
-import EditUniversity from "./EditUnivesity"
-
+import useUniversity from "@/hooks/useUniversity";
+import { University as UniversityType } from "@/types";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
+import TableRowsIcon from '@mui/icons-material/TableRows';
+import { Button, Typography } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import DialogConfirmation from "../Dialog/DialogConfirmation";
+import Loading from "../Loading";
+import DetailsUniversity from "./DetailsUniversity";
+import EditUniversity from "./EditUnivesity";
 interface Props {
   universityId: string;
 }
 
 export default function University({ universityId }: Props) {
   const [isLoading, setIsLoading] = useState(true)
+  const [buttonLoading, setButtonLoading] = useState(false)
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
   const { deleteUniversity, readUniversity, universities } = useUniversity()
@@ -36,9 +38,10 @@ export default function University({ universityId }: Props) {
   }, [universities])
 
   const router = useRouter()
-
+  const pathName = usePathname()
 
   const confirmDelete = async () => {
+    setButtonLoading(true);
     try {
       await deleteUniversity(universityId)
       setTimeout(() => {
@@ -46,10 +49,12 @@ export default function University({ universityId }: Props) {
         toast.success('Universidade deletada com sucesso!');
         setOpenDialogConfirmation(false)
         router.back()
+        setButtonLoading(false);
       }, 1000);
 
     } catch (error) {
       toast.error('Ocorreu um erro ao deletar.');
+      setButtonLoading(false);
     }
   }
 
@@ -60,17 +65,21 @@ export default function University({ universityId }: Props) {
       return <EditUniversity university={university} onSave={() => setEditVisibility(false)} />
     else {
       return (
-        <div>
-          <div className="flex flex-col w-[32rem] mt-3">
-            {<DetailsUniversity university={university} />}
-            <div className="flex justify-between mt-12 w-[90%]">
-              <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => setOpenDialogConfirmation(true)}> Deletar </Button>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col w-[32rem]">
 
-              <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="contained" onClick={() => setEditVisibility(true)}> Editar </Button>
+            <DetailsUniversity university={university} />
 
+            <div className="flex justify-between h-10 mt-12">
+              <Button className="w-auto" variant="contained" startIcon={<TableRowsIcon />} onClick={() => router.push(`${pathName}/cursos`)}>Ver cursos</Button>
+              <div className="flex w-auto gap-3 ">
+                <Button onClick={() => setOpenDialogConfirmation(true)} startIcon={<DeleteIcon color="error" fontSize="inherit" />} fullWidth variant="outlined" color="error" > Deletar </Button>
+                <Button onClick={() => setEditVisibility(true)} startIcon={<EditIcon />} fullWidth variant="contained" > Editar </Button>
+              </div>
             </div>
+
           </div>
-          <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
+          <DialogConfirmation buttonDisabled={buttonLoading} content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
         </div>
       )
     }

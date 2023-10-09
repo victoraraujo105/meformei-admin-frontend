@@ -1,17 +1,18 @@
 
 'use client'
-
-import { Course as CourseType } from "@/types"
-import { Button, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
-import DialogConfirmation from "../Dialog/DialogConfirmation"
-import Loading from "../Loading"
-
-import useCourse from "@/hooks/useCourse"
-import DetailsCourse from "./DetailsCourse"
-import EditCourse from "./EditCourse"
+import useCourse from "@/hooks/useCourse";
+import { Course as CourseType } from "@/types";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
+import TableRowsIcon from '@mui/icons-material/TableRows';
+import { Button, Typography } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import DialogConfirmation from "../Dialog/DialogConfirmation";
+import Loading from "../Loading";
+import DetailsCourse from "./DetailsCourse";
+import EditCourse from "./EditCourse";
 
 interface Props {
   courseId: string;
@@ -19,6 +20,7 @@ interface Props {
 
 export default function Course({ courseId }: Props) {
   const [isLoading, setIsLoading] = useState(true)
+  const [buttonLoading, setButtonLoading] = useState(false)
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
   const { deleteCourse, readCourse, courses } = useCourse()
@@ -34,12 +36,14 @@ export default function Course({ courseId }: Props) {
       }
       setIsLoading(false)
     })
-  }, [courses])
+  }, [courseId, courses])
 
   const router = useRouter()
+  const pathname = usePathname()
 
 
   const confirmDelete = async () => {
+    setButtonLoading(true);
     try {
       await deleteCourse(courseId)
       setTimeout(() => {
@@ -47,10 +51,12 @@ export default function Course({ courseId }: Props) {
         toast.success('Curso deletado com sucesso!');
         setOpenDialogConfirmation(false)
         router.back()
+        setButtonLoading(false)
       }, 1000);
 
     } catch (error) {
       toast.error('Ocorreu um erro ao deletar.');
+      setButtonLoading(false)
     }
   }
 
@@ -61,17 +67,21 @@ export default function Course({ courseId }: Props) {
       return <EditCourse course={course} onSave={() => setEditVisibility(false)} />
     else {
       return (
-        <div>
-          <div className="flex flex-col w-[32rem] mt-3">
-            {<DetailsCourse course={course} />}
-            <div className="flex justify-between mt-12 w-[90%]">
-              <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => setOpenDialogConfirmation(true)}> Deletar </Button>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col w-[32rem]">
 
-              <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="contained" onClick={() => setEditVisibility(true)}> Editar </Button>
+            <DetailsCourse course={course} />
 
+            <div className="flex justify-between h-10 mt-12">
+              <Button startIcon={<TableRowsIcon />} className="w-auto" variant="contained" onClick={() => router.push(`${pathname}/disciplinas`)}>Ver disciplinas</Button>
+              <div className="flex w-auto gap-3 ">
+                <Button onClick={() => setOpenDialogConfirmation(true)} startIcon={<DeleteIcon color="error" fontSize="inherit" />} fullWidth variant="outlined" color="error" > Deletar </Button>
+                <Button onClick={() => setEditVisibility(true)} startIcon={<EditIcon />} fullWidth variant="contained" > Editar </Button>
+              </div>
             </div>
+
           </div>
-          <DialogConfirmation content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
+          <DialogConfirmation buttonDisabled={buttonLoading} content='Tem certeza de que deseja excluir este item?' open={openDialogConfirmation} onConfirm={() => confirmDelete()} handleClose={() => setOpenDialogConfirmation(false)} />
         </div>
       )
     }

@@ -2,14 +2,13 @@
 import useDiscipline from '@/hooks/useDiscipline';
 import useToast from '@/hooks/useToast';
 import { Discipline } from '@/types';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Chip, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Button, Chip, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { DisciplineBody, disciplineAddSchema } from './validations';
 
-
+import CancelIcon from '@mui/icons-material/Cancel';
 interface Props {
   discipline: Discipline
   onSave: () => void;
@@ -44,13 +43,13 @@ function EditDiscipline({ discipline, onSave }: Props) {
   const initialValues = {
     cod: discipline.cod,
     bibliography: discipline.bibliography,
-    courseOutline: discipline.courseOutline,
+    courseOutline: discipline.menu,
     description: discipline.description,
     name: discipline.name,
-    optional: discipline.optional,
+    optional: discipline.isOptional,
     semester: discipline.semester,
-    prerequisites: discipline.prerequisiteDisciplines,
-    hours: discipline.hours,
+    prerequisites: discipline.prerequisites,
+    hours: discipline.workload,
     curriculumId: discipline.curriculumId
   }
 
@@ -86,7 +85,7 @@ function EditDiscipline({ discipline, onSave }: Props) {
           {({ values, handleBlur, handleChange, touched, errors, handleSubmit, setFieldValue }) => (
 
             <Form className='form pt-2 grid grid-cols-2 gap-3 max-w-md' id={formId} onSubmit={handleSubmit} >
-
+              <Button onClick={() => console.log(values, discipline)}>Teste</Button>
               <FormControl sx={{ mb: 3 }} fullWidth>
                 <InputLabel htmlFor="name">Nome</InputLabel>
                 <OutlinedInput
@@ -247,6 +246,7 @@ function EditDiscipline({ discipline, onSave }: Props) {
                         <Chip
                           key={value}
                           label={value}
+                          color="primary"
                           clickable
                           deleteIcon={
                             <CancelIcon
@@ -275,7 +275,6 @@ function EditDiscipline({ discipline, onSave }: Props) {
             </Form>)}
 
         </Formik>
-        <ToastContainer />
 
       </div>
 

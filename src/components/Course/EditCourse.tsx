@@ -6,7 +6,7 @@ import { useState } from 'react';
 import useCourse from '@/hooks/useCourse';
 import useToast from '@/hooks/useToast';
 import { Course } from '@/types';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { courseEditSchema } from './validations';
 
 
@@ -21,7 +21,7 @@ function EditCourse({ course, onSave }: Props) {
   const [isChanged, setIsChanged] = useState(false)
 
   const { toastRef } = useToast()
-  const { updateCourse, deleteCourse } = useCourse()
+  const { updateCourse } = useCourse()
 
 
   const handleChange = () => {
@@ -61,9 +61,9 @@ function EditCourse({ course, onSave }: Props) {
   });
 
 
+
   return (
     <>
-
       <div className='w-[32rem] mt-3'>
         <form onSubmit={formik.handleSubmit} onChange={handleChange}>
           <FormControl sx={{ mb: 3 }} fullWidth>
@@ -149,14 +149,12 @@ function EditCourse({ course, onSave }: Props) {
 
           <div className='flex justify-between '>
 
-            <Button disabled={isLoading} className='w-[25%]' variant="outlined" onClick={() => onSave()}>voltar</Button>
+            <Button disabled={isLoading} className='w-[25%]' variant="outlined" onClick={() => onSave()}>Voltar</Button>
             <Button disabled={isLoading || !isChanged} className='w-[25%]' variant="contained" type="submit">Salvar</Button>
 
           </div>
 
         </form>
-        <ToastContainer />
-
       </div>
 
     </>

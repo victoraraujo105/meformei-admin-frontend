@@ -6,7 +6,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import FormDialog from "../Dialog/DialogForm";
-import { DisciplineBody, disciplineAddSchema } from "./validations";
+import { disciplineAddSchema } from "./validations";
 interface Props {
   open: boolean
   onConfirm: () => void;
@@ -30,10 +30,11 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
 
   useEffect(() => {
     setToastRef(toast)
-  }, [])
+  })
+
   const initialValues = {
     cod: "",
-    bibliography: [],
+    bibliography: "",
     courseOutline: "",
     description: "",
     name: "",
@@ -43,11 +44,12 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
     hours: 0
   }
 
-  const onSubmitForm = async (values: DisciplineBody, { resetForm }: { resetForm: () => void }) => {
+  const onSubmitForm = async (values: any, { resetForm }: { resetForm: () => void }) => {
     setIsLoading(true);
-
+    let newData = { ...values, bibliography: [values.bibliography] }
+    console.log(newData)
     try {
-      await createDiscipline({ disciplineBody: values })
+      await createDiscipline({ disciplineBody: newData })
       setTimeout(() => {
         toast.success('Disciplina criada com sucesso!');
         setIsLoading(false);
@@ -195,6 +197,7 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                 value={values.bibliography}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                multiline
               />
               {touched.bibliography && errors.bibliography && (
                 <div>{errors.bibliography}</div>
@@ -236,6 +239,8 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                         key={value}
                         label={value}
                         clickable
+                        color="primary"
+                        sx={{ mr: 0.5 }}
                         deleteIcon={
                           <CancelIcon
                             onMouseDown={(event: any) => event.stopPropagation()}

@@ -8,7 +8,7 @@ interface Props {
 
 
 export default function DetailsDiscipline({ discipline }: Props) {
-  const { id, cod, name, courseOutline, bibliography, description, hours, optional, prerequisiteDisciplines, semester } = discipline
+  const { id, cod, name, menu, bibliography, description, workload, isOptional, prerequisites, semester } = discipline
 
   const data = [{
     label: "Identificador",
@@ -22,32 +22,32 @@ export default function DetailsDiscipline({ discipline }: Props) {
     value: cod
   },
   {
-    label: "Ementa",
-    value: courseOutline
+    label: "Semestre",
+    value: semester
   },
   {
-    label: "Bibliografia",
-    value: bibliography
+    label: "Carga horaria",
+    value: workload
+  },
+  {
+    label: "Optativa",
+    value: isOptional ? "Sim" : "Não"
   },
   {
     label: "Descrição",
     value: description
   },
   {
-    label: "Carga horaria",
-    value: hours
+    label: "Ementa",
+    value: menu
   },
   {
-    label: "Optativa",
-    value: optional ? "Sim" : "Não"
-  },
-  {
-    label: "Semestre",
-    value: semester
+    label: "Bibliografia",
+    value: bibliography
   },
   {
     label: "Prerequisitos",
-    value: prerequisiteDisciplines
+    value: prerequisites.length > 0 ? prerequisites.map((cod) => cod) : "Nenhum"
   },
   ]
   const variantTitle = "body1"

@@ -12,25 +12,25 @@ export const CourseProvider = ({ children, universityId }: Props) => {
 
   useEffect(() => {
     CourseService.getCourses(universityId).then((response) => setCourses(response.data.courses))
-  }, [])
+  }, [universityId])
 
   const isEmpty = async () => {
     return courses.length > 0
   }
 
   const deleteCourse = async (id: string) => {
-    const response = await CourseService.deleteCourse(universityId, id)
+    await CourseService.deleteCourse(id)
     setCourses((prev) => prev.filter((course) => course.id !== id))
   }
   const updateCourse = async ({ id, data }: UpdateCourse) => {
-    CourseService.updateCourse(universityId, id, data)
+    CourseService.updateCourse(id, data)
       .then((response) =>
-        setCourses((prev) => prev.map((course) => course.id === id ? response.data.course : course))
+        setCourses((prev) => prev.map((course) => course.id === id ? response.data.curriculum : course))
       )
   }
   const createCourse = async ({ courseBody }: { courseBody: CourseBody }) => {
     CourseService.postCourse(universityId, courseBody)
-      .then((response) => setCourses((prev) => [...prev, response.data.course]))
+      .then((response) => setCourses((prev) => [...prev, response.data.curriculum]))
   };
 
   const readCourse = async (id: string) => {

@@ -1,6 +1,5 @@
 
 import Course from '@/components/Course'
-import DisciplinesInCourse from '@/components/Discipline/DisciplinesInCourse'
 import BasicTabs from '@/components/Tabs/index'
 import { PropertyComponentTabs } from '@/components/Tabs/tabs'
 import { CourseProvider } from '@/contexts/CourseContext'
@@ -40,12 +39,7 @@ export default async function Page({
     {
       tabIndex: 0,
       tabTitle: "Informações",
-      tabComponent: <CourseProvider universityId={data.course.university.id}> <Course courseId={curriculumId} /> </CourseProvider>
-    },
-    {
-      tabIndex: 1,
-      tabTitle: "Disciplinas",
-      tabComponent: <DisciplinesInCourse courseId={data.course.id} />
+      tabComponent: <CourseProvider universityId={data.curriculum.university.id}> <Course courseId={curriculumId} /> </CourseProvider>
     },
   ]
   return (

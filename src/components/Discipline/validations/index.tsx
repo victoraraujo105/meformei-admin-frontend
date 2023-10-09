@@ -21,7 +21,7 @@ export const disciplineAddSchema = yup.object({
   semester: yup.number().required("Campo obrigatorio"),
   description: yup.string().required("Campo obrigatorio"),
   prerequisiteDisciplines: yup.array().of(yup.string()).required("Campo obrigatorio"),
-  bibliography: yup.array().of(yup.string()).required("Campo obrigatorio"),
+  bibliography: yup.string().required("Campo obrigatorio"),
   hours: yup.number().required("Campo obrigatorio"),
 });
 

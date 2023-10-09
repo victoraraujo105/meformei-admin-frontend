@@ -12,15 +12,15 @@ export interface UserAdmin {
 export interface Discipline {
   id: string;
   cod: string;
-  optional: boolean;
+  isOptional: boolean;
   name: string;
-  courseOutline: string;
+  menu: string;
   semester: number;
   description: string;
-  prerequisiteDisciplines: string[];
+  prerequisites: string[];
   bibliography: string[];
   curriculumId: string;
-  hours: number;
+  workload: number;
 }
 
 export interface Course {

@@ -1,17 +1,20 @@
 "use client";
+import useAuth from '@/hooks/useAuth';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Avatar, Menu, MenuItem } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { CSSObject, Theme, styled, useTheme } from '@mui/material/styles';
+import Link from 'next/link';
 import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 import ListMenu from './ListMenu';
 
 const drawerWidth = 240;
@@ -91,7 +94,7 @@ interface Props {
 export default function DrawerComponent({ children, title }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const { signOut } = useAuth()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -100,11 +103,19 @@ export default function DrawerComponent({ children, title }: Props) {
     setOpen(false);
   };
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <Box sx={{ display: 'flex' }}>
 
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar className='flex justify-between'>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -120,9 +131,63 @@ export default function DrawerComponent({ children, title }: Props) {
           <Typography variant="h6" noWrap component="div">
             {title}
           </Typography>
+
+          <IconButton
+            aria-controls={openMenu ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? 'true' : undefined}
+            onClick={handleClick}>
+            <Avatar />
+          </IconButton>
+
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem>
+              <Link
+                style={{
+                  textDecoration: 'none',
+                  color: '#000'
+                }}
+                href="/perfil"
+              >
+                Perfil
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link
+                style={{
+                  textDecoration: 'none',
+                  color: '#000'
+                }}
+                href="/conta"
+              >
+                Minha conta
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link
+                style={{
+                  textDecoration: 'none',
+                  color: '#000'
+                }}
+                href="/"
+                onClick={signOut}
+              >
+                Sair
+              </Link>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
+        <ToastContainer />
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
