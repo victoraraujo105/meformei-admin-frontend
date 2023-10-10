@@ -5,13 +5,46 @@ import { createContext, useEffect, useState } from 'react';
 import { AuthService } from '../services/auth.service';
 
 export const AuthContext = createContext({} as AuthContextType);
-
 export const AuthProvider = ({ children }: Props) => {
 
   const [user, setUser] = useState<UserAdmin | null>(null);
-
   const isAuthenticated = !!user;
+
+
+  const connectUser = () => {
+    const socket = new WebSocket('ws://localhost:3001')
+    socket.onopen = () => {
+      // A conexão foi estabelecida com sucesso
+      console.log('Conexão WebSocket estabelecida.');
+    };
+
+    socket.onmessage = (event) => {
+      // Recebeu uma mensagem do servidor WebSocket
+      console.log('Mensagem recebida:', event.data);
+    };
+
+    socket.onclose = (event) => {
+      // A conexão foi fechada
+      console.log('Conexão WebSocket fechada.', event.code, event.reason);
+    };
+
+    socket.onerror = (error) => {
+      // Ocorreu um erro na conexão WebSocket
+      console.error('Erro na conexão WebSocket:', error);
+    };
+
+    socket.addEventListener('open', (event) => {
+      console.log('Connected to WebSocket server');
+      socket.send('Hello, server!');
+    });
+
+    socket.addEventListener('message', (event) => {
+      console.log('Message from server:', event.data);
+    });
+  }
+
   useEffect(() => {
+
     const { token } = parseCookies()
 
     if (token) {
@@ -31,7 +64,7 @@ export const AuthProvider = ({ children }: Props) => {
     setCookie(undefined, 'token', token, { maxAge: 60 * 60 * 24 * 7 })  //7 dias
 
     API.defaults.headers['Authorization'] = `Bearer ${token}`;
-
+    connectUser()
     setUser(userData)
     return { token: token, user: userData }
   }
