@@ -90,7 +90,7 @@ export default function DataGrid({ rows, columns, height, toolbar, ...props }: P
             },
           },
         }}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[7]}
         disableRowSelectionOnClick
         sx={{
           boxShadow: 2,

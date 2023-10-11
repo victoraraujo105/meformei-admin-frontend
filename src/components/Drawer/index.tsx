@@ -95,6 +95,7 @@ export default function DrawerComponent({ children, title }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const { signOut } = useAuth()
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -111,6 +112,7 @@ export default function DrawerComponent({ children, title }: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Box sx={{ display: 'flex' }}>
 
