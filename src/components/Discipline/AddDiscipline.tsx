@@ -39,22 +39,21 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
     description: "",
     name: "",
     optional: false,
-    semester: 0,
+    semester: null,
     prerequisites: [],
-    hours: 0
+    hours: null,
   }
 
   const onSubmitForm = async (values: any, { resetForm }: { resetForm: () => void }) => {
     setIsLoading(true);
     let newData = { ...values, bibliography: [values.bibliography] }
-    console.log(newData)
     try {
-      await createDiscipline({ disciplineBody: newData })
+      await createDiscipline({ disciplines: [newData] })
       setTimeout(() => {
         toast.success('Disciplina criada com sucesso!');
         setIsLoading(false);
         resetForm()
-        onClose
+        onClose()
       }, 1000);
     } catch (error) {
       toast.error('Ocorreu um erro ao criar.');
@@ -67,7 +66,7 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
       isLoading={isLoading}
       formId={formId}
       onClose={onClose}
-      onConfirm={onConfirm}
+      onConfirm={() => { }}
       open={open}
       title="Adicionar disciplina"
     >
@@ -152,7 +151,7 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.semester && Boolean(errors.semester)}
-
+                type="number"
               />
               <FormHelperText id="semester-helper-text">{touched.semester && errors.semester}</FormHelperText>
             </FormControl>
@@ -175,6 +174,7 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                   }
                 }}
                 onBlur={handleBlur}
+                error={touched.optional && Boolean(errors.optional)}
               >
 
                 {selectOptinalOptions.map(({ text }) => (
@@ -184,24 +184,21 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                 ))}
 
               </Select>
-              {touched.optional && errors.optional && (
-                <div>{errors.optional}</div>
-              )}
+              <FormHelperText id="description-helper-text">{touched.optional && errors.optional}</FormHelperText>
             </FormControl>
 
             <FormControl  >
               <InputLabel>Bibliografia</InputLabel>
               <OutlinedInput
                 name="bibliography"
-                label="Prerequisites"
+                label="bibliography"
                 value={values.bibliography}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 multiline
+                error={touched.bibliography && Boolean(errors.bibliography)}
               />
-              {touched.bibliography && errors.bibliography && (
-                <div>{errors.bibliography}</div>
-              )}
+              <FormHelperText id="description-helper-text">{touched.description && errors.description}</FormHelperText>
             </FormControl>
 
             <FormControl>
@@ -212,10 +209,10 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                 value={values.hours}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                error={touched.hours && Boolean(errors.hours)}
+                type="number"
               />
-              {touched.hours && errors.hours && (
-                <div>{errors.hours}</div>
-              )}
+              <FormHelperText id="description-helper-text">{touched.hours && errors.hours}</FormHelperText>
             </FormControl>
 
             <FormControl >
@@ -246,14 +243,12 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                             onMouseDown={(event: any) => event.stopPropagation()}
                           />
                         }
-                      // className={classes.chip}
-                      // onDelete={(e) => handleDelete(e, value)}
-                      // onClick={() => console.log("clicked chip")}
+
                       />
                     ))}
                   </div>
                 )}
-
+                error={touched.prerequisites && Boolean(errors.prerequisites)}
               >
 
                 {disciplines.map(({ id, cod, name }) => (
@@ -263,9 +258,8 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
                 ))}
 
               </Select>
-              {touched.prerequisites && errors.prerequisites && (
-                <div>{errors.prerequisites}</div>
-              )}
+
+              <FormHelperText id="description-helper-text">{touched.prerequisites && errors.prerequisites}</FormHelperText>
             </FormControl>
 
           </Form>)}

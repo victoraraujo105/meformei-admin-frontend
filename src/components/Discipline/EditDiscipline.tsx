@@ -6,7 +6,7 @@ import { Button, Chip, FormControl, FormHelperText, InputLabel, MenuItem, Outlin
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { DisciplineBody, disciplineAddSchema } from './validations';
+import { disciplineEditSchema } from './validations';
 
 import CancelIcon from '@mui/icons-material/Cancel';
 interface Props {
@@ -36,13 +36,13 @@ function EditDiscipline({ discipline, onSave }: Props) {
   const { updateDiscipline, deleteDiscipline, disciplines } = useDiscipline()
 
 
-  const handleChange = () => {
+  const handleChanged = () => {
     setIsChanged(true)
   }
 
   const initialValues = {
     cod: discipline.cod,
-    bibliography: discipline.bibliography,
+    bibliography: discipline.bibliography[0],
     courseOutline: discipline.menu,
     description: discipline.description,
     name: discipline.name,
@@ -54,12 +54,12 @@ function EditDiscipline({ discipline, onSave }: Props) {
   }
 
 
-  const onSubmitForm = async (values: DisciplineBody) => {
+  const onSubmitForm = async (values: any) => {
     setIsLoading(true)
-
+    let newData = { ...values, bibliography: [values.bibliography] }
     try {
 
-      await updateDiscipline({ id: discipline.id, data: values })
+      await updateDiscipline({ id: discipline.id, data: newData })
       setTimeout(() => {
         if (toastRef.current) {
           toastRef.current.success('Dados atualizados com sucesso!');
@@ -74,18 +74,17 @@ function EditDiscipline({ discipline, onSave }: Props) {
     }
   }
 
-  const formId = "addDisciplineInCourse"
+  const formId = "editDisciplineInCourse"
 
   return (
     <>
 
-      <div className='w-[32rem] mt-3'>
-        <Formik initialValues={initialValues} validationSchema={disciplineAddSchema} onSubmit={onSubmitForm}>
+      <div className='w-[32rem] mt-3 '>
+        <Formik initialValues={initialValues} validationSchema={disciplineEditSchema} onSubmit={onSubmitForm}>
 
           {({ values, handleBlur, handleChange, touched, errors, handleSubmit, setFieldValue }) => (
 
-            <Form className='form pt-2 grid grid-cols-2 gap-3 max-w-md' id={formId} onSubmit={handleSubmit} >
-              <Button onClick={() => console.log(values, discipline)}>Teste</Button>
+            <Form className='form grid grid-cols-2 gap-3 ' onChange={handleChanged} id={formId} onSubmit={handleSubmit} >
               <FormControl sx={{ mb: 3 }} fullWidth>
                 <InputLabel htmlFor="name">Nome</InputLabel>
                 <OutlinedInput
@@ -161,7 +160,7 @@ function EditDiscipline({ discipline, onSave }: Props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={touched.semester && Boolean(errors.semester)}
-
+                  type='number'
                 />
                 <FormHelperText id="semester-helper-text">{touched.semester && errors.semester}</FormHelperText>
               </FormControl>
@@ -169,6 +168,7 @@ function EditDiscipline({ discipline, onSave }: Props) {
               <FormControl fullWidth>
                 <InputLabel>Optativa</InputLabel>
                 <Select
+                  id="optional"
                   name="optional"
                   label="Optativa"
                   value={selectOptinalOptions.find(({ id }) => id === values.optional)?.text}
@@ -184,6 +184,7 @@ function EditDiscipline({ discipline, onSave }: Props) {
                     }
                   }}
                   onBlur={handleBlur}
+                  error={touched.optional && Boolean(errors.optional)}
                 >
 
                   {selectOptinalOptions.map(({ text }) => (
@@ -193,42 +194,42 @@ function EditDiscipline({ discipline, onSave }: Props) {
                   ))}
 
                 </Select>
-                {touched.optional && errors.optional && (
-                  <div>{errors.optional}</div>
-                )}
+                <FormHelperText id="optional-helper-text">{touched.optional && errors.optional}</FormHelperText>
               </FormControl>
 
               <FormControl  >
                 <InputLabel>Bibliografia</InputLabel>
                 <OutlinedInput
+                  id="bibliography"
                   name="bibliography"
                   label="Bibliografia"
                   value={values.bibliography}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  error={touched.bibliography && Boolean(errors.bibliography)}
                 />
-                {touched.bibliography && errors.bibliography && (
-                  <div>{errors.bibliography}</div>
-                )}
+                <FormHelperText id="bibliography-helper-text">{touched.bibliography && errors.bibliography}</FormHelperText>
               </FormControl>
 
               <FormControl>
                 <InputLabel>Carga horária</InputLabel>
                 <OutlinedInput
+                  id="hours"
                   name="hours"
                   label="Carga horária"
                   value={values.hours}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  type='number'
+                  error={touched.hours && Boolean(errors.hours)}
                 />
-                {touched.hours && errors.hours && (
-                  <div>{errors.hours}</div>
-                )}
+                <FormHelperText id="hours-helper-text">{touched.hours && errors.hours}</FormHelperText>
               </FormControl>
 
               <FormControl >
                 <InputLabel>Prerequisitos</InputLabel>
                 <Select
+                  id="prerequisites"
                   name="prerequisites"
                   label="Prerequisites"
                   value={values.prerequisites}
@@ -257,25 +258,29 @@ function EditDiscipline({ discipline, onSave }: Props) {
                       ))}
                     </div>
                   )}
-
+                  error={touched.prerequisites && Boolean(errors.prerequisites)}
                 >
 
                   {disciplines.map(({ id, cod, name }) => (
-                    <MenuItem key={id} value={cod} sx={{ maxWidth: 350 }} >
+                    <MenuItem key={id} value={cod} sx={{ maxWidth: 350 }} selected={values.prerequisites.includes(cod)} onClick={() => setIsChanged(true)} >
                       [{cod}] {name}
                     </MenuItem>
                   ))}
 
                 </Select>
-                {touched.prerequisites && errors.prerequisites && (
-                  <div>{errors.prerequisites}</div>
-                )}
+                <FormHelperText id="prerequisites-helper-text">{touched.prerequisites && errors.prerequisites}</FormHelperText>
               </FormControl>
+
 
             </Form>)}
 
         </Formik>
+        <div className='flex justify-between w-full mt-4'>
 
+          <Button disabled={isLoading} className='w-1/4' variant="outlined" onClick={() => onSave()}>Voltar</Button>
+          <Button disabled={isLoading || !isChanged} className='w-1/4' variant="contained" form={formId} type="submit">Salvar</Button>
+
+        </div>
       </div>
 
     </>

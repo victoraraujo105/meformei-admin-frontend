@@ -1,5 +1,5 @@
 "use client"
-import { DisciplineBody, PartialDiscipline } from '@/components/Discipline/validations';
+import { CreateDisciplineBody, PartialDiscipline } from '@/components/Discipline/validations';
 import { DisciplineService } from '@/services/discipline.service';
 import { Discipline } from '@/types';
 import { createContext, useEffect, useState } from 'react';
@@ -24,9 +24,11 @@ export const DisciplineProvider = ({ children, courseId }: Props) => {
         setData((prev) => prev.map((discipline) => discipline.id === id ? response.data.discipline : discipline))
       )
   }
-  const createDiscipline = async ({ disciplineBody }: { disciplineBody: DisciplineBody }) => {
-    DisciplineService.postDiscipline(courseId, disciplineBody)
-      .then((response) => setData((prev) => [...prev, response.data.discipline]))
+  const createDiscipline = async (data: CreateDisciplineBody) => {
+    DisciplineService.postDiscipline(courseId, data)
+      .then((response) => {
+        setData((prev) => [...prev, response.data.disciplines[0].disciplines[0]])
+      })
   };
 
   const readDiscipline = async (id: string) => {
@@ -46,7 +48,7 @@ export type DisciplineContextType = {
   disciplines: Discipline[];
   deleteDiscipline: (id: string) => Promise<void>;
   updateDiscipline: (data: UpdateDiscipline) => Promise<void>;
-  createDiscipline: ({ disciplineBody }: { disciplineBody: DisciplineBody }) => Promise<void>;
+  createDiscipline: (data: CreateDisciplineBody) => Promise<void>;
   readDiscipline: (id: string) => Promise<Discipline | null>;
 }
 

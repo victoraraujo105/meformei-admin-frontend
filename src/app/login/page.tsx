@@ -1,8 +1,9 @@
 "use client"
 
 import FormLogin from '@/components/FormLogin';
-import { Link, Typography } from "@mui/material";
+import { Link as LinkMui, Typography } from "@mui/material";
 import Image from 'next/image';
+import Link from 'next/link';
 import MeFormeiIcon from "../../assets/meformei-icon.svg";
 
 
@@ -25,26 +26,15 @@ export default function Page() {
 
 
           <div className='flex flex-row gap-4 mt-3'>
-            <Link
-              component="button"
+
+            <LinkMui
+              component={Link}
               variant="body2"
               underline="none"
-              onClick={() => {
-                console.info("I'm a button.");
-              }}
-            >
-              Entrar com email
-            </Link>
-            <Link
-              component="button"
-              variant="body2"
-              underline="none"
-              onClick={() => {
-                console.info("I'm a button.");
-              }}
+              href={"/recuperar-senha"}
             >
               Esqueci a senha
-            </Link>
+            </LinkMui>
 
           </div>
         </div>

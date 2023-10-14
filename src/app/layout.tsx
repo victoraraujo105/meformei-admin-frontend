@@ -1,6 +1,5 @@
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { CssBaseline } from '@mui/material'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,8 +23,7 @@ export default function RootLayout({
       </head>
       <body className={poppins.className}>
 
-        <ThemeRegistry>
-          <CssBaseline />
+        <ThemeRegistry >
           <AuthProvider>
             {children}
           </AuthProvider>

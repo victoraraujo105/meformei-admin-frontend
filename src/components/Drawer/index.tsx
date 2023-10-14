@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { CSSObject, Theme, styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import * as React from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ColorModeContext } from '../ThemeRegistry/ThemeRegistry';
 import ListMenu from './ListMenu';
 
 const drawerWidth = 240;
@@ -112,6 +112,7 @@ export default function DrawerComponent({ children, title }: Props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const colorMode = React.useContext(ColorModeContext);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -130,25 +131,32 @@ export default function DrawerComponent({ children, title }: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" >
             {title}
           </Typography>
 
-          <IconButton
-            aria-controls={openMenu ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={openMenu ? 'true' : undefined}
-            onClick={handleClick}>
-            <Avatar />
-          </IconButton>
+          {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton> */}
+          <div>
+            {/* <MaterialUISwitch sx={{ m: 1 }} onClick={colorMode.toggleColorMode} /> */}
+
+            <IconButton
+              aria-controls={openMenu ? 'avatar-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openMenu ? 'true' : undefined}
+              onClick={handleClick}>
+              <Avatar />
+            </IconButton>
+          </div>
 
           <Menu
-            id="basic-menu"
+            id="avatar-menu"
             anchorEl={anchorEl}
             open={openMenu}
             onClose={handleClose}
             MenuListProps={{
-              'aria-labelledby': 'basic-button',
+              'aria-labelledby': '-button',
             }}
           >
             <MenuItem>
@@ -189,7 +197,7 @@ export default function DrawerComponent({ children, title }: Props) {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <ToastContainer />
+
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}

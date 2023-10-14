@@ -89,7 +89,7 @@ export default function Disciplines() {
         key={"dg disciplinas no curso"}
         toolbar={<Button variant="text" onClick={() => setOpenDialogForm(true)} startIcon={<AddIcon />} >Adicionar</Button>}
       />
-      <AddDiscipline open={openDialogForm} onClose={() => setOpenDialogForm(false)} onConfirm={() => setOpenDialogForm(true)} />
+      <AddDiscipline open={openDialogForm} onClose={() => setOpenDialogForm(false)} onConfirm={() => setOpenDialogForm(false)} />
     </>
   )
 }

@@ -12,11 +12,10 @@ import {
 } from "@mui/material";
 
 import { useRouter } from "next/navigation";
-
 const CustomListItemText = styled(ListItemText, {
-})(() => ({
+})(({ theme }) => ({
   ".MuiListItemText-primary": {
-    color: "#1976d2"
+    color: theme.palette.primary.main
   },
 }));
 
@@ -27,7 +26,7 @@ export default function ListMenu() {
     <List component="nav">
       <ListItemButton onClick={() => router.push("/home")}>
         <ListItemIcon>
-          <DashboardIcon sx={{ color: "#1976d2" }} />
+          <DashboardIcon sx={{ color: 'primary.main' }} />
         </ListItemIcon>
         <CustomListItemText primary="Painel Geral" />
       </ListItemButton>
@@ -35,7 +34,7 @@ export default function ListMenu() {
       <Divider />
       <ListItemButton onClick={() => router.push("/universidades")}>
         <ListItemIcon>
-          <SchoolIcon sx={{ color: "#1976d2" }} />
+          <SchoolIcon sx={{ color: 'primary.main' }} />
         </ListItemIcon>
         <CustomListItemText primary="Universidades" />
       </ListItemButton>

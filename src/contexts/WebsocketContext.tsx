@@ -1,49 +1,57 @@
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import io, { Socket } from 'socket.io-client';
 
-
-import useAuth from '@/hooks/useAuth';
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { Socket, io } from 'socket.io-client';
-
-interface WebSocketContextType {
-  socket: Socket | null;
+interface WebSocketContextProps {
+  userCount: { students: number, admins: number };
+  socket: Socket | null
 }
-
-const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
-
-export const useWebSocket = (): WebSocketContextType => {
-  const context = useContext(WebSocketContext);
-  if (!context) {
-    throw new Error('useWebSocket must be used within a WebSocketProvider');
-  }
-  return context;
-};
 
 interface WebSocketProviderProps {
-  children: ReactNode;
+  userId: string | null;
+  isAdmin: boolean | null;
+  children: React.ReactNode;
 }
 
-const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const { user } = useAuth()
+const WebSocketContext = createContext<WebSocketContextProps | undefined>(undefined);
+
+export function WebSocketProvider({ children, userId, isAdmin }: WebSocketProviderProps) {
+  const [userCount, setUserCount] = useState({ students: 0, admins: 0 });
+  const socketRef = useRef<Socket | null>(null);
+
   useEffect(() => {
-    const newSocket = io(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {
-      auth: {
-        userId: user?.id
-      }
-    });
-    setSocket(newSocket);
+    if (userId) {
+      const socket = io(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {
+        auth: { userId, isAdmin },
+      });
+      socketRef.current = socket;
+      socket.connect();
+    }
+
+    if (socketRef.current) {
+      socketRef.current.on('connectedUsers', (count: any) => {
+        console.log(count)
+        setUserCount(count);
+      });
+    }
 
     return () => {
-      newSocket.close();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
-  }, []);
+  }, [userId]);
 
   return (
-    <WebSocketContext.Provider value={{ socket }}>
+    <WebSocketContext.Provider value={{ userCount, socket: socketRef?.current }}>
       {children}
     </WebSocketContext.Provider>
   );
-};
+}
 
-export { WebSocketProvider };
-
+export function useWebSocket() {
+  const context = useContext(WebSocketContext);
+  if (context === undefined) {
+    throw new Error('useWebSocket must be used within a WebSocketProvider');
+  }
+  return context;
+}

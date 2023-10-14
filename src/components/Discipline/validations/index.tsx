@@ -7,8 +7,8 @@ export const disciplineEditSchema = yup.object({
   courseOutline: yup.string().optional(),
   semester: yup.number().optional(),
   description: yup.string().optional(),
-  prerequisiteDisciplines: yup.array().of(yup.string()).optional(),
-  bibliography: yup.array().of(yup.string()).optional(),
+  prerequisites: yup.array().of(yup.string()).optional(),
+  bibliography: yup.string().optional(),
   curriculumId: yup.string().optional(),
   hours: yup.number().optional(),
 });
@@ -20,10 +20,14 @@ export const disciplineAddSchema = yup.object({
   courseOutline: yup.string().required("Campo obrigatorio"),
   semester: yup.number().required("Campo obrigatorio"),
   description: yup.string().required("Campo obrigatorio"),
-  prerequisiteDisciplines: yup.array().of(yup.string()).required("Campo obrigatorio"),
+  prerequisites: yup.array().of(yup.string()).required("Campo obrigatorio"),
   bibliography: yup.string().required("Campo obrigatorio"),
   hours: yup.number().required("Campo obrigatorio"),
 });
+
+export interface CreateDisciplineBody {
+  disciplines: DisciplineBody[]
+}
 
 export interface DisciplineBody {
   cod: string;

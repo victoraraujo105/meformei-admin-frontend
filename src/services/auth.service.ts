@@ -26,6 +26,21 @@ export const AuthService = {
   },
 
   async me(): Promise<UserAdmin> {
-    return API.get("auth/me"); // implementar no backend
+    return API.get("auth/me"); 
   },
+
+  async resetPassword(data: {token: string | null, password: string, passwordConfirmation: string}) {
+    const { token, password, passwordConfirmation} = data
+    if(!token) return Promise.reject()
+    return API.post(`auth/reset-password/${token}`, { password, passwordConfirmation }); 
+  },
+
+  async changePassword(data: { userId: string, password: string, passwordConfirmation: string}) {
+    const { userId, password, passwordConfirmation} = data
+    return API.post(`auth/${userId}/change-password`, { password, passwordConfirmation }); 
+  },
+
+  async sendRecoverPassword(data: {email: string}){
+    return API.post(`auth/send-recover-email`, { email: data.email }); 
+  }
 };

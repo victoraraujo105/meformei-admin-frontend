@@ -109,7 +109,7 @@ function EditCourse({ course, onSave }: Props) {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.requiredHours && Boolean(formik.errors.requiredHours)}
-
+              type='number'
             />
             <FormHelperText id="requiredHours-helper-text">{formik.touched.requiredHours && formik.errors.requiredHours}</FormHelperText>
           </FormControl>
@@ -125,7 +125,7 @@ function EditCourse({ course, onSave }: Props) {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.optionalHours && Boolean(formik.errors.optionalHours)}
-
+              type='number'
             />
             <FormHelperText id="optionalHours-helper-text">{formik.touched.optionalHours && formik.errors.optionalHours}</FormHelperText>
           </FormControl>
@@ -141,7 +141,7 @@ function EditCourse({ course, onSave }: Props) {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.extraCurricularHours && Boolean(formik.errors.extraCurricularHours)}
-
+              type='number'
             />
             <FormHelperText id="extraCurricularHours-helper-text">{formik.touched.extraCurricularHours && formik.errors.extraCurricularHours}</FormHelperText>
           </FormControl>
