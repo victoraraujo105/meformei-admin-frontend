@@ -173,8 +173,6 @@ export default function AddUniversity({ open, onClose, onConfirm }: Props) {
           )}
         </FormControl>
 
-
-
       </form>
     </FormDialog>
   )

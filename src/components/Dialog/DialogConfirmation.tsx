@@ -11,9 +11,10 @@ interface Props {
   onConfirm: () => void;
   open: boolean;
   buttonDisabled?: boolean
+  id?: string
 }
 
-export default function DialogConfirmation({ buttonDisabled, content, handleClose, onConfirm, open }: Props) {
+export default function DialogConfirmation({ buttonDisabled, content, handleClose, onConfirm, open , id }: Props) {
 
 
   return (
@@ -34,7 +35,7 @@ export default function DialogConfirmation({ buttonDisabled, content, handleClos
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>Cancelar</Button>
-        <Button variant="contained" onClick={onConfirm} disabled={buttonDisabled} autoFocus>
+        <Button variant="contained" id={id+"-submit"} onClick={onConfirm} disabled={buttonDisabled} autoFocus>
           Confirmar
         </Button>
       </DialogActions>

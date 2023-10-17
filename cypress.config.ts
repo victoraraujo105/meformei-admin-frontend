@@ -12,7 +12,7 @@ export default defineConfig({
     auth0_username: "root4",
     auth0_password: "123",
     frontendUrl:  "http://localhost:3000",
-    backendUrl:  "http://localhost:3001"
+    backendUrl:  "http://204.216.155.107:3000"
   },
 });
 
