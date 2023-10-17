@@ -58,6 +58,7 @@ export default function AddDiscipline({ open, onClose, onConfirm }: Props) {
     } catch (error) {
       toast.error('Ocorreu um erro ao criar.');
       setIsLoading(false);
+      console.log(error)
     }
   }
   const formId = "addDisciplineInCourse"

@@ -23,7 +23,7 @@ export default function University({ universityId }: Props) {
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
   const { deleteUniversity, readUniversity, universities } = useUniversity()
-  const [university, setUniversity] = useState<UniversityType>()
+  const [university, setUniversity] = useState<UniversityType | null>()
 
 
   useEffect(() => {
@@ -40,6 +40,8 @@ export default function University({ universityId }: Props) {
   const router = useRouter()
   const pathName = usePathname()
 
+  let pathNames = pathName.split('/').filter(path => path)
+
   const confirmDelete = async () => {
     setButtonLoading(true);
     try {
@@ -48,7 +50,9 @@ export default function University({ universityId }: Props) {
 
         toast.success('Universidade deletada com sucesso!');
         setOpenDialogConfirmation(false)
-        router.back()
+
+        pathNames.pop()
+        router.push(`/${pathNames.join("/")}`)
         setButtonLoading(false);
       }, 1000);
 
@@ -87,9 +91,8 @@ export default function University({ universityId }: Props) {
 
   return (
     <div className="flex flex-col justify-center items-center w-[35%] gap-4 h-44">
-      <Typography variant="body1" >Ocorreu um erro ao tentar carregar os dados</Typography>
-      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => router.back()}> Voltar </Button>
+      <Typography variant="body1" >...</Typography>
+      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => { pathNames.pop(); router.push(`/${pathNames.join("/")}`) }}> Voltar </Button>
     </div>
   )
-
 }

@@ -17,17 +17,26 @@ export const DisciplineProvider = ({ children, courseId }: Props) => {
   const deleteDiscipline = async (id: string) => {
     const response = await DisciplineService.deleteDiscipline(id)
     setData((prev) => prev.filter((discipline) => discipline.id !== id))
+    return response
   }
   const updateDiscipline = async ({ id, data }: UpdateDiscipline) => {
-    DisciplineService.updateDiscipline(id, data)
+    return DisciplineService.updateDiscipline(id, data)
       .then((response) =>
         setData((prev) => prev.map((discipline) => discipline.id === id ? response.data.discipline : discipline))
       )
   }
   const createDiscipline = async (data: CreateDisciplineBody) => {
-    DisciplineService.postDiscipline(courseId, data)
+    return DisciplineService.postDiscipline(courseId, data)
       .then((response) => {
-        setData((prev) => [...prev, response.data.disciplines[0].disciplines[0]])
+        setData((prev) => {
+          if (prev.length > 0) {
+            return [...prev, response.data.disciplines[0].disciplines[0]]
+          }
+          else {
+            return [response.data.disciplines[0].disciplines[0]]
+          }
+        }
+        )
       })
   };
 

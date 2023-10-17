@@ -31,7 +31,14 @@ export const UniversityProvider = ({ children }: Props) => {
   }
   const createUniversity = async ({ universityBody }: { universityBody: UniversityBody }) => {
     const response = await UniversityService.postUnivesity(universityBody)
-    setUniversities((prev) => [...prev, response.data.university])
+    setUniversities((prev) => {
+      if (prev.length > 0) {
+        return [...prev, response.data.university]
+      }
+      else {
+        return [response.data.university]
+      }
+    })
   };
 
   const readUniversity = async (id: string) => {

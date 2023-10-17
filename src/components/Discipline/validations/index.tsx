@@ -5,12 +5,12 @@ export const disciplineEditSchema = yup.object({
   optional: yup.string().optional(),
   name: yup.string().optional(),
   courseOutline: yup.string().optional(),
-  semester: yup.number().optional(),
+  semester: yup.number().optional().min(1, "No minimo 1").max(20, "No maximo 20"),
   description: yup.string().optional(),
   prerequisites: yup.array().of(yup.string()).optional(),
   bibliography: yup.string().optional(),
   curriculumId: yup.string().optional(),
-  hours: yup.number().optional(),
+  hours: yup.number().optional().min(1, "No minimo 1").max(1000, "No maximo 1000"),
 });
 
 export const disciplineAddSchema = yup.object({
@@ -18,11 +18,11 @@ export const disciplineAddSchema = yup.object({
   optional: yup.boolean().required("Campo obrigatorio"),
   name: yup.string().required("Campo obrigatorio"),
   courseOutline: yup.string().required("Campo obrigatorio"),
-  semester: yup.number().required("Campo obrigatorio"),
+  semester: yup.number().required("Campo obrigatorio").min(1, "No minimo 1").max(20, "No maximo 20"),
   description: yup.string().required("Campo obrigatorio"),
   prerequisites: yup.array().of(yup.string()).required("Campo obrigatorio"),
   bibliography: yup.string().required("Campo obrigatorio"),
-  hours: yup.number().required("Campo obrigatorio"),
+  hours: yup.number().required("Campo obrigatorio").min(1, "No minimo 1").max(1000, "No maximo 1000"),
 });
 
 export interface CreateDisciplineBody {

@@ -19,18 +19,26 @@ export const CourseProvider = ({ children, universityId }: Props) => {
   }
 
   const deleteCourse = async (id: string) => {
-    await CourseService.deleteCourse(id)
+    const res = await CourseService.deleteCourse(id)
     setCourses((prev) => prev.filter((course) => course.id !== id))
+    return res
   }
   const updateCourse = async ({ id, data }: UpdateCourse) => {
-    CourseService.updateCourse(id, data)
+    return CourseService.updateCourse(id, data)
       .then((response) =>
         setCourses((prev) => prev.map((course) => course.id === id ? response.data.curriculum : course))
       )
   }
   const createCourse = async ({ courseBody }: { courseBody: CourseBody }) => {
-    CourseService.postCourse(universityId, courseBody)
-      .then((response) => setCourses((prev) => [...prev, response.data.curriculum]))
+    return CourseService.postCourse(universityId, courseBody)
+      .then((response) => setCourses((prev) => {
+        if (prev.length > 0) {
+          return [...prev, response.data.curriculum]
+        }
+        else {
+          return [response.data.curriculum]
+        }
+      }))
   };
 
   const readCourse = async (id: string) => {

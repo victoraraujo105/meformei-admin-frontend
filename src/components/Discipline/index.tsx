@@ -6,7 +6,7 @@ import { Discipline as DisciplineType } from "@/types"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from '@mui/icons-material/Edit'
 import { Button, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import DialogConfirmation from "../Dialog/DialogConfirmation"
@@ -23,7 +23,10 @@ export default function Discipline({ disciplineId }: Props) {
   const [editVisibility, setEditVisibility] = useState(false)
   const [openDialogConfirmation, setOpenDialogConfirmation] = useState(false)
   const { disciplines, readDiscipline, deleteDiscipline } = useDiscipline()
-  const [discipline, setDiscipline] = useState<DisciplineType>()
+  const [discipline, setDiscipline] = useState<DisciplineType | null>()
+
+  const paths = usePathname()
+  let pathNames = paths.split('/').filter(path => path)
 
 
   useEffect(() => {
@@ -47,7 +50,9 @@ export default function Discipline({ disciplineId }: Props) {
 
         toast.success('Disciplina deletada com sucesso!');
         setOpenDialogConfirmation(false)
-        router.back()
+
+        pathNames.pop()
+        router.push(`/${pathNames.join("/")}`)
         setButtonLoading(false)
       }, 1000);
 
@@ -82,10 +87,11 @@ export default function Discipline({ disciplineId }: Props) {
     }
   }
 
+
   return (
     <div className="flex flex-col justify-center items-center w-[35%] gap-4 h-44">
-      <Typography variant="body1" >Ocorreu um erro ao tentar carregar os dados</Typography>
-      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => router.back()}> Voltar </Button>
+      <Typography variant="body1" >...</Typography>
+      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => { pathNames.pop(); router.push(`/${pathNames.join("/")}`) }}> Voltar </Button>
     </div>
   )
 

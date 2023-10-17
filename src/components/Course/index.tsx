@@ -41,6 +41,7 @@ export default function Course({ courseId }: Props) {
   const router = useRouter()
   const pathname = usePathname()
 
+  let pathNames = pathname.split('/').filter(path => path)
 
   const confirmDelete = async () => {
     setButtonLoading(true);
@@ -50,7 +51,9 @@ export default function Course({ courseId }: Props) {
 
         toast.success('Curso deletado com sucesso!');
         setOpenDialogConfirmation(false)
-        router.back()
+
+        pathNames.pop()
+        router.push(`/${pathNames.join("/")}`)
         setButtonLoading(false)
       }, 1000);
 
@@ -89,8 +92,8 @@ export default function Course({ courseId }: Props) {
 
   return (
     <div className="flex flex-col justify-center items-center w-[35%] gap-4 h-44">
-      <Typography variant="body1" >Ocorreu um erro ao tentar carregar os dados</Typography>
-      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => router.back()}> Voltar </Button>
+      <Typography variant="body1" >...</Typography>
+      <Button sx={{ minWidth: "20%", maxWidth: "30%" }} variant="outlined" onClick={() => { pathNames.pop(); router.push(`/${pathNames.join("/")}`) }}> Voltar </Button>
     </div>
   )
 

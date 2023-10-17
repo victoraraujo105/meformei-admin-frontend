@@ -24,12 +24,13 @@ export default function FormLogin() {
 
   const onSubmitLoginForm = async (values: LoginBody) => {
     setIsLoading(true);
+
     try {
       await signIn(values);
-      router.push("/home")
+      router.push("/home");
     } catch (error) {
       formik.setErrors({ password: 'Usuario não reconhecido!' });
-
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +94,7 @@ export default function FormLogin() {
           <FormHelperText id="password-helper-text">{formik.touched.password && formik.errors.password}</FormHelperText>
         </FormControl>
       </form>
-      <Button disabled={isLoading} type='submit' form='formlogin' variant="contained" fullWidth className='h-12'>Entrar</Button>
+      <Button disabled={isLoading} type='submit' form='formlogin' variant="contained" fullWidth className='h-12 button-signin'>Entrar</Button>
     </>
   )
 }

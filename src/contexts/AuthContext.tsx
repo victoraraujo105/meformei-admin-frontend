@@ -27,12 +27,13 @@ export const AuthProvider = ({ children }: Props) => {
   }, [])
 
   async function signIn({ username, password }: SignInData) {
+
     const { data } = await AuthService.signIn({ username, password })
 
     const token = data?.token
 
     const userData: UserAdmin = data.user
-    if (!data.user.isAdmin) return Promise.reject()
+    if (!data.isAdmin) return Promise.reject()
     setCookie(undefined, 'token', token, { maxAge: 60 * 60 * 24 * 7 })  //7 dias
 
     API.defaults.headers['Authorization'] = `Bearer ${token}`;
